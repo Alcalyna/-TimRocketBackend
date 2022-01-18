@@ -42,7 +42,35 @@ public class Member {
     public Member() {
     }
 
-    private enum Role {
+    public UUID getId() {
+        return id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public enum Role {
         COACH,
         COACHEE,
         ADMIN

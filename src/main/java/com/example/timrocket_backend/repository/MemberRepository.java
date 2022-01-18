@@ -1,4 +1,12 @@
 package com.example.timrocket_backend.repository;
 
-public interface MemberRepository {
+import com.example.timrocket_backend.domain.Member;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.UUID;
+
+@Repository
+public interface MemberRepository extends JpaRepository<Member, UUID> {
+
 }

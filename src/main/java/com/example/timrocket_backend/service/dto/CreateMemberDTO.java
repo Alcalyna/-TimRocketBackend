@@ -1,4 +1,8 @@
 package com.example.timrocket_backend.service.dto;
 
-public class CreateMemberDTO {
+public record CreateMemberDTO(String firstName,
+                              String lastName,
+                              String email,
+                              String password,
+                              String company) {
 }
