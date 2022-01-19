@@ -20,4 +20,10 @@ public enum Role {
     public List<Feature> getFeatures() {
         return features;
     }
+
+    public String getRoleName() {
+        return this.name();
+    }
 }
+
+
