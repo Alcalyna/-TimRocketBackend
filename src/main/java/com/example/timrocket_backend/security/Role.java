@@ -22,7 +22,7 @@ public enum Role {
     }
 
     public String getRoleName() {
-        return this.name();
+        return this.name().toLowerCase();
     }
 }
 
