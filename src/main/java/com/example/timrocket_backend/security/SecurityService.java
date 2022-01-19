@@ -1,5 +1,6 @@
 package com.example.timrocket_backend.security;
 
+import com.example.timrocket_backend.domain.Member;
 import com.google.common.collect.Lists;
 import org.keycloak.admin.client.CreatedResponseUtil;
 import org.keycloak.admin.client.Keycloak;
@@ -85,5 +86,9 @@ public class SecurityService {
         member.setUsername(memberName);
         member.setEnabled(true);
         return member;
+    }
+
+    public Member getLoggedMember() {
+        return null;
     }
 }
