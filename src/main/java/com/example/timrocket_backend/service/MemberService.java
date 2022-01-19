@@ -20,6 +20,9 @@ public class MemberService {
 
     public MemberDTO createMember(CreateMemberDTO createMemberDTO) {
         Member member = memberMapper.createMemberDtoToMember(createMemberDTO);
+
+
+
         memberRepository.save(member);
         MemberDTO memberDTO = memberMapper.memberToMemberDto(member);
         return memberDTO;
