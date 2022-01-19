@@ -1,8 +1,7 @@
-package com.example.timrocket_backend.service.dto;
+package com.example.timrocket_backend.service.validation;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import java.lang.annotation.Annotation;
 
 public class PasswordValidator implements ConstraintValidator<PasswordConstraint, String> {
     @Override
