@@ -11,12 +11,11 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-
 
 @RestController
 @RequestMapping(path = "/members")
@@ -32,11 +31,17 @@ public class MemberController {
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public MemberDTO createMember(@Valid @RequestBody CreateMemberDTO createMemberDTO){
-
+    public MemberDTO createMember(@Valid @RequestBody CreateMemberDTO createMemberDTO) {
+        System.out.println("got in to controller");
         MemberDTO memberDTO = memberService.createMember(createMemberDTO);
 
         return memberDTO;
+    }
+
+    @GetMapping(produces = APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public List<MemberDTO> getMembers() {
+        return memberService.getAllMembers();
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -52,4 +57,5 @@ public class MemberController {
         });
         return errors;
     }
+
 }

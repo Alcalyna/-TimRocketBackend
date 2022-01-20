@@ -10,6 +10,8 @@ import com.example.timrocket_backend.service.dto.MemberDTO;
 import com.example.timrocket_backend.service.mapper.MemberMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class MemberService {
 
@@ -32,4 +34,7 @@ public class MemberService {
     }
 
 
+    public List<MemberDTO> getAllMembers() {
+        return memberRepository.findAll().stream().map(m ->  memberMapper.memberToMemberDto(m)).toList();
+    }
 }
