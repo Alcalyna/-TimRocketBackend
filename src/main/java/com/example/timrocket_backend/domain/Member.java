@@ -30,6 +30,9 @@ public class Member {
     @Column(name = "ROLE")
     private Role role;
 
+//    @Column(name = "PICTURE_URL")
+//    private String pictureUrl;
+
     public Member(String firstName, String lastName, String email, String password, String company, Role role) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -38,6 +41,11 @@ public class Member {
         this.company = company;
         this.role = role;
     }
+
+//    public Member(String firstName, String lastName, String email, String password, String company, Role role, String pictureUrl) {
+//        this(firstName, lastName, email, password, company, role);
+//        this.pictureUrl = pictureUrl;
+//    }
 
     public Member() {
     }
@@ -69,6 +77,10 @@ public class Member {
     public Role getRole() {
         return role;
     }
+
+//    public String getPictureUrl() {
+//        return pictureUrl;
+//    }
 
     public enum Role {
         COACH,

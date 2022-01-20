@@ -40,9 +40,7 @@ public class MemberController {
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public MemberDTO createMember(@Valid @RequestBody CreateMemberDTO createMemberDTO){
-
         MemberDTO memberDTO = memberService.createMember(createMemberDTO);
-
         return memberDTO;
     }
 
@@ -64,7 +62,7 @@ public class MemberController {
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasAnyAuthority('GET_MEMBER_INFORMATION')")
     public MemberInformationDTO getMemberInformation(@PathVariable UUID id) {
-        Member loggedMember = securityService.getLoggedMember();
+        Member loggedMember = memberService.getMemberByEmail(id);
         memberService.isLoggedIn(loggedMember.getId(), id);
         MemberInformationDTO memberInfo = memberService.getInformation(loggedMember);
         return memberInfo;

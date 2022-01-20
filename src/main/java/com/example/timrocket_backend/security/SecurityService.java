@@ -33,7 +33,7 @@ public class SecurityService {
     public String addMember(SecurityMemberDTO securityMemberDTO) {
         String createdMemberId = createMember(securityMemberDTO);
         getMember(createdMemberId).resetPassword(createCredentialRepresentation(securityMemberDTO.password()));
-        addRole(getMember(createdMemberId), securityMemberDTO.role().getRoleName());
+        addRole(getMember(createdMemberId), securityMemberDTO.securityRole().getRoleName());
         return createdMemberId;
     }
 

@@ -1,6 +1,7 @@
 package com.example.timrocket_backend.service;
 
 import com.example.timrocket_backend.domain.Member;
+import com.example.timrocket_backend.exception.AccessProfileException;
 import com.example.timrocket_backend.repository.MemberRepository;
 import com.example.timrocket_backend.service.dto.CreateMemberDTO;
 import com.example.timrocket_backend.service.dto.MemberDTO;
@@ -20,6 +21,8 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final MemberMapper memberMapper;
+    public static final String ANSI_PURPLE = "\u001B[35m";
+    public static final String RESET = "\u001B[0m";
 
 
     public MemberService(MemberRepository memberRepository, MemberMapper memberMapper) {
@@ -34,11 +37,22 @@ public class MemberService {
         return memberDTO;
     }
 
-    public void isLoggedIn(UUID id, UUID id1) {
+    public void isLoggedIn(UUID loggedMemberId, UUID pathId) {
+        if(!loggedMemberId.equals(pathId)) {
+            throw new AccessProfileException("You are not allowed to check another profile except yours!");
+        }
     }
 
     public MemberInformationDTO getInformation(Member loggedMember) {
-        return null;
+        System.out.println(ANSI_PURPLE + "I am getting the info " + RESET);
+        MemberInformationDTO memberInformationDTO = memberMapper.memberToMemberInformationDto(loggedMember);
+        return memberInformationDTO;
     }
 
+    public Member getMemberByEmail(UUID id) {
+        System.out.println(ANSI_PURPLE + "I am getting the member by Email " + RESET);
+        Member member = memberRepository.getById(id);
+        System.out.println(ANSI_PURPLE + member.getEmail() + RESET);
+        return member;
+    }
 }
