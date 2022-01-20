@@ -1,1 +1,1 @@
-web: java -Dserver.port=$PORT $JAVA_OPTS  -Dspring.profiles.active=production -jar target/tim-rocket-backend-1.0.0-SNAPSHOT.jar
+web: java -Dserver.port=$PORT $JAVA_OPTS  -Dspring.profiles.active=production -jar target/timRocket_backend-0.0.1-SNAPSHOT.jar
