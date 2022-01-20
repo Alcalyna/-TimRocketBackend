@@ -32,9 +32,7 @@ public class MemberController {
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public MemberDTO createMember(@Valid @RequestBody CreateMemberDTO createMemberDTO) {
-        System.out.println("got in to controller");
         MemberDTO memberDTO = memberService.createMember(createMemberDTO);
-
         return memberDTO;
     }
 
