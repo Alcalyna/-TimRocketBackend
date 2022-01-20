@@ -14,7 +14,7 @@
     <name>timRocket_backend</name>
     <description>timRocket_backend</description>
     <properties>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <flyway.version>8.1.0</flyway.version>
         <springdoc-openapi-version>1.5.7</springdoc-openapi-version>
         <h2.version>1.4.200</h2.version>
