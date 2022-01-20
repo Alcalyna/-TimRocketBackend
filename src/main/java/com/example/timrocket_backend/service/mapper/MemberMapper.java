@@ -24,7 +24,7 @@ public class MemberMapper {
                 .setLastName(member.getLastName())
                 .setEmail(member.getEmail())
                 .setCompany(member.getCompany())
-                .setRole(member.getRole().name().toLowerCase());
-//                .setPictureUrl(member.getPictureUrl());
+                .setRole(member.getRole().name().toLowerCase())
+                .setPictureUrl(member.getPictureUrl());
     }
 }

@@ -6,6 +6,7 @@ import com.example.timrocket_backend.repository.MemberRepository;
 import com.example.timrocket_backend.service.dto.CreateMemberDTO;
 import com.example.timrocket_backend.service.dto.MemberDTO;
 import com.example.timrocket_backend.service.dto.MemberInformationDTO;
+import com.example.timrocket_backend.service.dto.UserLoggedDTO;
 import com.example.timrocket_backend.service.mapper.MemberMapper;
 import org.springframework.stereotype.Service;
 
@@ -49,10 +50,10 @@ public class MemberService {
         return memberInformationDTO;
     }
 
-    public Member getMemberByEmail(UUID id) {
+    public Member getMemberByEmail(UserLoggedDTO userLoggedDTO) {
         System.out.println(ANSI_PURPLE + "I am getting the member by Email " + RESET);
-        Member member = memberRepository.getById(id);
-        System.out.println(ANSI_PURPLE + member.getEmail() + RESET);
-        return member;
+        Member res = memberRepository.findByEmail(userLoggedDTO.getEmail());
+        System.out.println(ANSI_PURPLE + res.getEmail() + RESET);
+        return res;
     }
 }

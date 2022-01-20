@@ -6,7 +6,7 @@ public class MemberInformationDTO {
     String email;
     String company;
     String role;
-//    String pictureUrl;
+    String pictureUrl;
 
     public String getFirstName() {
         return firstName;
@@ -28,9 +28,9 @@ public class MemberInformationDTO {
         return role;
     }
 
-//    public String getPictureUrl() {
-//        return pictureUrl;
-//    }
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
 
     public MemberInformationDTO setFirstName(String firstName) {
         this.firstName = firstName;
@@ -57,8 +57,8 @@ public class MemberInformationDTO {
         return this;
     }
 
-//    public MemberInformationDTO setPictureUrl(String pictureUrl) {
-//        this.pictureUrl = pictureUrl;
-//        return this;
-//    }
+    public MemberInformationDTO setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
+        return this;
+    }
 }

@@ -4,11 +4,11 @@ import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
-@Table(name = "MEMBER")
+@Table(name = "MEMBERS")
 public class Member {
     @Id
     @GeneratedValue
-    @Column(name = "MEMBER_ID")
+    @Column(name = "ID")
     private UUID id;
 
     @Column(name = "FIRSTNAME")
@@ -30,8 +30,8 @@ public class Member {
     @Column(name = "ROLE")
     private Role role;
 
-//    @Column(name = "PICTURE_URL")
-//    private String pictureUrl;
+    @Column(name = "PICTURE_URL")
+    private String pictureUrl;
 
     public Member(String firstName, String lastName, String email, String password, String company, Role role) {
         this.firstName = firstName;
@@ -42,10 +42,10 @@ public class Member {
         this.role = role;
     }
 
-//    public Member(String firstName, String lastName, String email, String password, String company, Role role, String pictureUrl) {
-//        this(firstName, lastName, email, password, company, role);
-//        this.pictureUrl = pictureUrl;
-//    }
+    public Member(String firstName, String lastName, String email, String password, String company, Role role, String pictureUrl) {
+        this(firstName, lastName, email, password, company, role);
+        this.pictureUrl = pictureUrl;
+    }
 
     public Member() {
     }
@@ -78,9 +78,9 @@ public class Member {
         return role;
     }
 
-//    public String getPictureUrl() {
-//        return pictureUrl;
-//    }
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
 
     public enum Role {
         COACH,
