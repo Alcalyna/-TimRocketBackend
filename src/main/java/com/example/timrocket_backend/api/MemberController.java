@@ -62,6 +62,7 @@ public class MemberController {
         return errors;
     }
 
+/*
     @GetMapping(produces = APPLICATION_JSON_VALUE, path = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasAnyAuthority('GET_MEMBER_INFORMATION')")
@@ -74,5 +75,12 @@ public class MemberController {
         MemberInformationDTO memberInfo = memberService.getInformation(loggedMember);
         System.out.println(ANSI_PURPLE + " Step 4 " + RESET);
         return memberInfo;
+    }
+*/
+
+    @GetMapping(produces = APPLICATION_JSON_VALUE, path = "/{email}")
+    @ResponseStatus(HttpStatus.OK)
+    public MemberInformationDTO getMemberByEmail(@PathVariable String email){
+        return memberService.getByEmail(email);
     }
 }
