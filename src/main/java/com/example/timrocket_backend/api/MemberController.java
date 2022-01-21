@@ -1,8 +1,10 @@
 package com.example.timrocket_backend.api;
 
+import com.example.timrocket_backend.security.SecurityService;
 import com.example.timrocket_backend.service.MemberService;
 import com.example.timrocket_backend.service.dto.CreateMemberDTO;
 import com.example.timrocket_backend.service.dto.MemberDTO;
+import com.example.timrocket_backend.service.dto.MemberInformationDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -21,20 +23,23 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequestMapping(path = "/members")
 public class MemberController {
 
+    public static final String ANSI_PURPLE = "\u001B[35m";
+    public static final String RESET = "\u001B[0m";
+
     private final MemberService memberService;
     private final Logger logger;
+    private final SecurityService securityService;
 
-    public MemberController(MemberService memberService) {
+    public MemberController(MemberService memberService, SecurityService securityService) {
         this.memberService = memberService;
+        this.securityService = securityService;
         this.logger = LoggerFactory.getLogger(MemberController.class);
     }
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public MemberDTO createMember(@Valid @RequestBody CreateMemberDTO createMemberDTO) {
-        System.out.println("got in to controller");
+    public MemberDTO createMember(@Valid @RequestBody CreateMemberDTO createMemberDTO){
         MemberDTO memberDTO = memberService.createMember(createMemberDTO);
-
         return memberDTO;
     }
 
@@ -58,4 +63,25 @@ public class MemberController {
         return errors;
     }
 
+//    @GetMapping(produces = APPLICATION_JSON_VALUE, path = "/{id}")
+//    @ResponseStatus(HttpStatus.OK)
+//    @PreAuthorize("hasAnyAuthority('GET_MEMBER_INFORMATION')")
+//    public MemberInformationDTO getMemberInformation(@PathVariable UUID id, @RequestBody UserLoggedDTO userLoggedDTO) {
+//        System.out.println(ANSI_PURPLE + " Step 1 " + RESET);
+//        Member loggedMember = memberService.getMemberByEmail(userLoggedDTO);
+//        System.out.println(ANSI_PURPLE + " Step 2 " + RESET);
+//        memberService.isLoggedIn(loggedMember.getId(), id);
+//        System.out.println(ANSI_PURPLE + " Step 3 " + RESET);
+//        MemberInformationDTO memberInfo = memberService.getInformation(loggedMember);
+//        System.out.println(ANSI_PURPLE + " Step 4 " + RESET);
+//        return memberInfo;
+//    }
+
+
+    @GetMapping(produces = APPLICATION_JSON_VALUE, path = "/{email}")
+    @ResponseStatus(HttpStatus.OK)
+    public MemberInformationDTO getMemberByEmail(@PathVariable String email){
+        return memberService.getByEmail(email);
+    }
 }
+

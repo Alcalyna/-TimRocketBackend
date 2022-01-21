@@ -1,5 +1,6 @@
 package com.example.timrocket_backend.security;
 
+import com.example.timrocket_backend.domain.Member;
 import com.google.common.collect.Lists;
 import org.keycloak.admin.client.CreatedResponseUtil;
 import org.keycloak.admin.client.Keycloak;
@@ -32,7 +33,7 @@ public class SecurityService {
     public String addMember(SecurityMemberDTO securityMemberDTO) {
         String createdMemberId = createMember(securityMemberDTO);
         getMember(createdMemberId).resetPassword(createCredentialRepresentation(securityMemberDTO.password()));
-        addRole(getMember(createdMemberId), securityMemberDTO.role().getRoleName());
+        addRole(getMember(createdMemberId), securityMemberDTO.securityRole().getRoleName());
         return createdMemberId;
     }
 
@@ -85,5 +86,9 @@ public class SecurityService {
         member.setUsername(memberName);
         member.setEnabled(true);
         return member;
+    }
+
+    public Member getLoggedMember() {
+        return null;
     }
 }
