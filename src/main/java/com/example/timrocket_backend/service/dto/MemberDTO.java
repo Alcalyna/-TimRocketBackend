@@ -7,4 +7,6 @@ public record MemberDTO(UUID id,
                         String lastName,
                         String email,
                         String company) {
+
 }
+

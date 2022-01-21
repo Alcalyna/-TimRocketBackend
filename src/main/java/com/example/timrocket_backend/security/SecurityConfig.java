@@ -38,8 +38,8 @@ class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
         KeycloakAuthenticationProvider keycloakAuthenticationProvider = keycloakAuthenticationProvider();
         keycloakAuthenticationProvider.setGrantedAuthoritiesMapper(collection ->
                 collection.stream()
-                        .map(keycloakRole -> Role.valueOf(keycloakRole.getAuthority().toUpperCase()))
-                        .flatMap(role -> role.getFeatures().stream())
+                        .map(keycloakRole -> SecurityRole.valueOf(keycloakRole.getAuthority().toUpperCase()))
+                        .flatMap(securityRole -> securityRole.getFeatures().stream())
                         .map(feature -> new SimpleGrantedAuthority(feature.name()))
                         .collect(Collectors.toSet())
         );
