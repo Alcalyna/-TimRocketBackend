@@ -5,6 +5,7 @@ import com.google.common.hash.Hashing;
 
 import javax.persistence.*;
 import java.nio.charset.StandardCharsets;
+import java.util.Locale;
 import java.util.UUID;
 
 @Entity
@@ -86,7 +87,8 @@ public class Member {
     }
 
     public String getRoleName() {
-        return this.role.name().toLowerCase();
+        String lowercaseName = this.role.name().toLowerCase();
+        return lowercaseName.substring(0, 1).toUpperCase() + lowercaseName.substring(1);
     }
 
     public String getPictureUrl() {
