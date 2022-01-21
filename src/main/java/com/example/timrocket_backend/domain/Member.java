@@ -1,11 +1,17 @@
 package com.example.timrocket_backend.domain;
 
+import com.example.timrocket_backend.security.SecurityRole;
+import com.google.common.hash.Hashing;
+
 import javax.persistence.*;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 @Entity
 @Table(name = "MEMBERS")
 public class Member {
+    private final static String DEFAULT_PROFILE_PICTURE = "assets/default-profile-picture.jpg";
+
     @Id
     @GeneratedValue
     @Column(name = "ID")
@@ -28,21 +34,22 @@ public class Member {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "ROLE")
-    private Role role;
+    private SecurityRole role;
 
     @Column(name = "PICTURE_URL")
     private String pictureUrl;
 
-    public Member(String firstName, String lastName, String email, String password, String company, Role role) {
+    public Member(String firstName, String lastName, String email, String password, String company, SecurityRole role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.password = password;
+        this.password = Hashing.sha256().hashString(password + "salt", StandardCharsets.UTF_8).toString();
         this.company = company;
         this.role = role;
+        this.pictureUrl = DEFAULT_PROFILE_PICTURE;
     }
 
-    public Member(String firstName, String lastName, String email, String password, String company, Role role, String pictureUrl) {
+    public Member(String firstName, String lastName, String email, String password, String company, SecurityRole role, String pictureUrl) {
         this(firstName, lastName, email, password, company, role);
         this.pictureUrl = pictureUrl;
     }
@@ -74,17 +81,16 @@ public class Member {
         return company;
     }
 
-    public Role getRole() {
+    public SecurityRole getRole() {
         return role;
+    }
+
+    public String getRoleName() {
+        return this.role.name().toLowerCase();
     }
 
     public String getPictureUrl() {
         return pictureUrl;
     }
 
-    public enum Role {
-        COACH,
-        COACHEE,
-        ADMIN
-    }
 }

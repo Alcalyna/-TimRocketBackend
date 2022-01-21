@@ -1,6 +1,7 @@
 package com.example.timrocket_backend.service.mapper;
 
 import com.example.timrocket_backend.domain.Member;
+import com.example.timrocket_backend.security.SecurityRole;
 import com.example.timrocket_backend.service.dto.CreateMemberDTO;
 import com.example.timrocket_backend.service.dto.MemberDTO;
 import com.example.timrocket_backend.service.dto.MemberInformationDTO;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Component;
 public class MemberMapper {
 
     public Member createMemberDtoToMember(CreateMemberDTO createMemberDTO) {
-        Member member = new Member(createMemberDTO.firstName(), createMemberDTO.lastName(), createMemberDTO.email(), createMemberDTO.password(), createMemberDTO.company(), Member.Role.COACHEE);
+        Member member = new Member(createMemberDTO.firstName(), createMemberDTO.lastName(), createMemberDTO.email(), createMemberDTO.password(), createMemberDTO.company(), SecurityRole.COACHEE);
         return member;
     }
 
@@ -24,7 +25,8 @@ public class MemberMapper {
                 .setLastName(member.getLastName())
                 .setEmail(member.getEmail())
                 .setCompany(member.getCompany())
-                .setRole(member.getRole().name().toLowerCase())
+                .setRole(member.getRoleName())
                 .setPictureUrl(member.getPictureUrl());
     }
 }
+
