@@ -1,6 +1,10 @@
 package com.example.timrocket_backend.domain;
 
+import com.google.common.hash.Hashing;
+
 import javax.persistence.*;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
@@ -34,7 +38,7 @@ public class Member {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.password = password;
+        this.password = Hashing.sha256().hashString(password + "salt", StandardCharsets.UTF_8).toString();
         this.company = company;
         this.role = role;
     }
@@ -42,7 +46,35 @@ public class Member {
     public Member() {
     }
 
-    private enum Role {
+    public UUID getId() {
+        return id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public enum Role {
         COACH,
         COACHEE,
         ADMIN
