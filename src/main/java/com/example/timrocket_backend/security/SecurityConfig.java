@@ -20,6 +20,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import java.util.stream.Collectors;
 
@@ -35,8 +38,8 @@ class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
         KeycloakAuthenticationProvider keycloakAuthenticationProvider = keycloakAuthenticationProvider();
         keycloakAuthenticationProvider.setGrantedAuthoritiesMapper(collection ->
                 collection.stream()
-                        .map(keycloakRole -> Role.valueOf(keycloakRole.getAuthority().toUpperCase()))
-                        .flatMap(role -> role.getFeatures().stream())
+                        .map(keycloakRole -> SecurityRole.valueOf(keycloakRole.getAuthority().toUpperCase()))
+                        .flatMap(securityRole -> securityRole.getFeatures().stream())
                         .map(feature -> new SimpleGrantedAuthority(feature.name()))
                         .collect(Collectors.toSet())
         );
@@ -61,12 +64,36 @@ class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         super.configure(http);
-        http.antMatcher("/**")
+        http.cors().and().antMatcher("/**")
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
                 .anyRequest()
                 .authenticated().and().csrf().disable();
     }
+
+    @Bean
+    public CorsFilter corsFilter() {
+
+        CorsConfiguration corsConfig = new CorsConfiguration();
+        corsConfig.setMaxAge(8000L);
+        corsConfig.setAllowCredentials(true);
+        corsConfig.addAllowedOrigin("http://localhost:4200");
+        corsConfig.addAllowedOrigin("https://tim-rocket.netlify.app");
+        corsConfig.addAllowedHeader("*");
+        corsConfig.addAllowedMethod("GET");
+        corsConfig.addAllowedMethod("POST");
+        corsConfig.addAllowedMethod("PUT");
+        corsConfig.addAllowedMethod("PATCH");
+        corsConfig.addAllowedMethod("DELETE");
+
+
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfig);
+
+        return new CorsFilter(source);
+    }
+
 
     /**
      * Configure here the endpoints that need to be anonymously available
