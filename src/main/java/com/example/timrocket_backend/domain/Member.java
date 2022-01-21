@@ -10,6 +10,8 @@ import java.util.UUID;
 @Entity
 @Table(name = "MEMBERS")
 public class Member {
+    private final static String DEFAULT_PROFILE_PICTURE = "assets/default-profile-picture.jpg";
+
     @Id
     @GeneratedValue
     @Column(name = "ID")
@@ -44,6 +46,7 @@ public class Member {
         this.password = Hashing.sha256().hashString(password + "salt", StandardCharsets.UTF_8).toString();
         this.company = company;
         this.role = role;
+        this.pictureUrl = DEFAULT_PROFILE_PICTURE;
     }
 
     public Member(String firstName, String lastName, String email, String password, String company, SecurityRole role, String pictureUrl) {
