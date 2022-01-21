@@ -78,7 +78,7 @@ class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
         corsConfig.setMaxAge(8000L);
         corsConfig.setAllowCredentials(true);
         corsConfig.addAllowedOrigin("http://localhost:4200");
-        corsConfig.addAllowedOrigin("https://tim-rocket-backend.herokuapp.com/");
+        corsConfig.addAllowedOrigin("https://tim-rocket.netlify.app");
         corsConfig.addAllowedHeader("*");
         corsConfig.addAllowedMethod("GET");
         corsConfig.addAllowedMethod("POST");
