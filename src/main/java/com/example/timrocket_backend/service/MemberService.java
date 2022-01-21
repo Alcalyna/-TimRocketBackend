@@ -56,4 +56,10 @@ public class MemberService {
         System.out.println(ANSI_PURPLE + res.getEmail() + RESET);
         return res;
     }
+
+    public MemberInformationDTO getByEmail(String email) {
+        Member member = memberRepository.findByEmail(email);
+        MemberInformationDTO memberInformationDTO = memberMapper.memberToMemberInformationDto(member);
+        return memberInformationDTO;
+    }
 }
