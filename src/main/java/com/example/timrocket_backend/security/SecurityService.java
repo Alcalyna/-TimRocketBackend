@@ -11,13 +11,15 @@ import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
+@Profile("!test")
 @Service
-public class SecurityService {
+public class SecurityService implements SecurityServiceInterface{
     private final RealmResource realmResource;
     private final String clientId;
 
@@ -28,7 +30,7 @@ public class SecurityService {
         this.realmResource = keycloak.realm(realmName);
     }
 
-
+    @Override
     public String addUser(SecurityUserDTO securityUserDTO) {
         String createdUserId = createUser(securityUserDTO);
         getUser(createdUserId).resetPassword(createCredentialRepresentation(securityUserDTO.password()));

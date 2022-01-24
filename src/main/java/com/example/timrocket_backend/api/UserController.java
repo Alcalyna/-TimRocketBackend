@@ -5,6 +5,11 @@ import com.example.timrocket_backend.service.UserService;
 import com.example.timrocket_backend.service.dto.CreateUserDTO;
 import com.example.timrocket_backend.service.dto.UserDTO;
 import com.example.timrocket_backend.service.dto.UserInformationDTO;
+import com.example.timrocket_backend.security.SecurityServiceInterface;
+import com.example.timrocket_backend.service.MemberService;
+import com.example.timrocket_backend.service.dto.CreateMemberDTO;
+import com.example.timrocket_backend.service.dto.MemberDTO;
+import com.example.timrocket_backend.service.dto.MemberInformationDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -28,7 +33,7 @@ public class UserController {
 
     private final UserService userService;
     private final Logger logger;
-    private final SecurityService securityService;
+    private final SecurityServiceInterface securityService;
 
     public UserController(UserService userService, SecurityService securityService) {
         this.userService = userService;
