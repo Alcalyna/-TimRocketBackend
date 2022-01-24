@@ -1,7 +1,5 @@
 package com.example.timrocket_backend.service.validation;
 
-import com.example.timrocket_backend.repository.MemberRepository;
-
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 

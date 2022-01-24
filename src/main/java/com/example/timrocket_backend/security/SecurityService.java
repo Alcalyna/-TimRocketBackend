@@ -1,6 +1,6 @@
 package com.example.timrocket_backend.security;
 
-import com.example.timrocket_backend.domain.Member;
+import com.example.timrocket_backend.domain.User;
 import com.google.common.collect.Lists;
 import org.keycloak.admin.client.CreatedResponseUtil;
 import org.keycloak.admin.client.Keycloak;
@@ -11,7 +11,6 @@ import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import javax.ws.rs.WebApplicationException;
@@ -29,23 +28,23 @@ public class SecurityService {
         this.realmResource = keycloak.realm(realmName);
     }
 
-    @Profile("!test")
-    public String addMember(SecurityMemberDTO securityMemberDTO) {
-        String createdMemberId = createMember(securityMemberDTO);
-        getMember(createdMemberId).resetPassword(createCredentialRepresentation(securityMemberDTO.password()));
-        addRole(getMember(createdMemberId), securityMemberDTO.securityRole().getRoleName());
-        return createdMemberId;
+
+    public String addUser(SecurityUserDTO securityUserDTO) {
+        String createdUserId = createUser(securityUserDTO);
+        getUser(createdUserId).resetPassword(createCredentialRepresentation(securityUserDTO.password()));
+        addRole(getUser(createdUserId), securityUserDTO.securityRole().getRoleName());
+        return createdUserId;
     }
 
-    public void deleteMember(String MemberId) {
-        getMember(MemberId).remove();
+    public void deleteUser(String userId) {
+        getUser(userId).remove();
     }
 
-    private String createMember(SecurityMemberDTO securityMemberDTO) {
+    private String createUser(SecurityUserDTO securityUserDTO) {
         try {
-            return CreatedResponseUtil.getCreatedId(createMember(securityMemberDTO.email()));
+            return CreatedResponseUtil.getCreatedId(createUser(securityUserDTO.email()));
         } catch (WebApplicationException exception) {
-            throw new MemberAlreadyExistsException(securityMemberDTO.email());
+            throw new UserAlreadyExistsException(securityUserDTO.email());
         }
     }
 
@@ -57,20 +56,20 @@ public class SecurityService {
         return passwordCredentials;
     }
 
-    private void addRole(UserResource Member, String roleName) {
-        Member.roles().clientLevel(getClientId()).add(Lists.newArrayList(getRole(roleName)));
+    private void addRole(UserResource User, String roleName) {
+        User.roles().clientLevel(getClientId()).add(Lists.newArrayList(getRole(roleName)));
     }
 
     private String getClientId() {
         return realmResource.clients().findByClientId(clientId).get(0).getId();
     }
 
-    private Response createMember(String memberName) {
-        return realmResource.users().create(createMemberRepresentation(memberName));
+    private Response createUser(String userName) {
+        return realmResource.users().create(createUserRepresentation(userName));
     }
 
-    private UserResource getMember(String MemberId) {
-        return realmResource.users().get(MemberId);
+    private UserResource getUser(String userId) {
+        return realmResource.users().get(userId);
     }
 
     private RoleRepresentation getRole(String roleToAdd) {
@@ -81,14 +80,14 @@ public class SecurityService {
         return realmResource.clients().get(getClientId());
     }
 
-    private UserRepresentation createMemberRepresentation(String memberName) {
-        UserRepresentation member = new UserRepresentation();
-        member.setUsername(memberName);
-        member.setEnabled(true);
-        return member;
+    private UserRepresentation createUserRepresentation(String userName) {
+        UserRepresentation user = new UserRepresentation();
+        user.setUsername(userName);
+        user.setEnabled(true);
+        return user;
     }
 
-    public Member getLoggedMember() {
+    public User getLoggedUser() {
         return null;
     }
 }

@@ -1,6 +1,6 @@
 package com.example.timrocket_backend.service.dto;
 
-public class MemberInformationDTO {
+public class UserInformationDTO {
     String firstName;
     String lastName;
     String email;
@@ -32,32 +32,32 @@ public class MemberInformationDTO {
         return pictureUrl;
     }
 
-    public MemberInformationDTO setFirstName(String firstName) {
+    public UserInformationDTO setFirstName(String firstName) {
         this.firstName = firstName;
         return this;
     }
 
-    public MemberInformationDTO setLastName(String lastName) {
+    public UserInformationDTO setLastName(String lastName) {
         this.lastName = lastName;
         return this;
     }
 
-    public MemberInformationDTO setEmail(String email) {
+    public UserInformationDTO setEmail(String email) {
         this.email = email;
         return this;
     }
 
-    public MemberInformationDTO setCompany(String company) {
+    public UserInformationDTO setCompany(String company) {
         this.company = company;
         return this;
     }
 
-    public MemberInformationDTO setRole(String role) {
+    public UserInformationDTO setRole(String role) {
         this.role = role;
         return this;
     }
 
-    public MemberInformationDTO setPictureUrl(String pictureUrl) {
+    public UserInformationDTO setPictureUrl(String pictureUrl) {
         this.pictureUrl = pictureUrl;
         return this;
     }

@@ -5,12 +5,11 @@ import com.google.common.hash.Hashing;
 
 import javax.persistence.*;
 import java.nio.charset.StandardCharsets;
-import java.util.Locale;
 import java.util.UUID;
 
 @Entity
 @Table(name = "MEMBERS")
-public class Member {
+public class User {
     private final static String DEFAULT_PROFILE_PICTURE = "assets/default-profile-picture.jpg";
 
     @Id
@@ -40,7 +39,7 @@ public class Member {
     @Column(name = "PICTURE_URL")
     private String pictureUrl;
 
-    public Member(String firstName, String lastName, String email, String password, String company, SecurityRole role) {
+    public User(String firstName, String lastName, String email, String password, String company, SecurityRole role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -50,12 +49,12 @@ public class Member {
         this.pictureUrl = DEFAULT_PROFILE_PICTURE;
     }
 
-    public Member(String firstName, String lastName, String email, String password, String company, SecurityRole role, String pictureUrl) {
+    public User(String firstName, String lastName, String email, String password, String company, SecurityRole role, String pictureUrl) {
         this(firstName, lastName, email, password, company, role);
         this.pictureUrl = pictureUrl;
     }
 
-    public Member() {
+    public User() {
     }
 
     public UUID getId() {
