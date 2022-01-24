@@ -1,7 +1,7 @@
 package com.example.timrocket_backend;
 
-import com.example.timrocket_backend.security.SecurityMemberDTO;
 import com.example.timrocket_backend.security.SecurityServiceInterface;
+import com.example.timrocket_backend.security.SecurityUserDTO;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 public class SecurityServiceMock implements SecurityServiceInterface {
 
     @Override
-    public String addMember(SecurityMemberDTO securityMemberDTO) {
+    public String addUser(SecurityUserDTO securityUserDTO) {
         System.out.println("Member in the mock added");
         return null;
     }

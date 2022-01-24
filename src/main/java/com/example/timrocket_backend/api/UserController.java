@@ -1,15 +1,10 @@
 package com.example.timrocket_backend.api;
 
-import com.example.timrocket_backend.security.SecurityService;
 import com.example.timrocket_backend.service.UserService;
 import com.example.timrocket_backend.service.dto.CreateUserDTO;
 import com.example.timrocket_backend.service.dto.UserDTO;
 import com.example.timrocket_backend.service.dto.UserInformationDTO;
 import com.example.timrocket_backend.security.SecurityServiceInterface;
-import com.example.timrocket_backend.service.MemberService;
-import com.example.timrocket_backend.service.dto.CreateMemberDTO;
-import com.example.timrocket_backend.service.dto.MemberDTO;
-import com.example.timrocket_backend.service.dto.MemberInformationDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -35,7 +30,7 @@ public class UserController {
     private final Logger logger;
     private final SecurityServiceInterface securityService;
 
-    public UserController(UserService userService, SecurityService securityService) {
+    public UserController(UserService userService, SecurityServiceInterface securityService) {
         this.userService = userService;
         this.securityService = securityService;
         this.logger = LoggerFactory.getLogger(UserController.class);
@@ -43,14 +38,14 @@ public class UserController {
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDTO createMember(@Valid @RequestBody CreateUserDTO createUserDTO){
+    public UserDTO createUser(@Valid @RequestBody CreateUserDTO createUserDTO){
         UserDTO userDTO = userService.createUser(createUserDTO);
         return userDTO;
     }
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public List<UserDTO> getMembers() {
+    public List<UserDTO> getUsers() {
         return userService.getAllUsers();
     }
 
@@ -85,7 +80,7 @@ public class UserController {
 
     @GetMapping(produces = APPLICATION_JSON_VALUE, path = "/{email}")
     @ResponseStatus(HttpStatus.OK)
-    public UserInformationDTO getMemberByEmail(@PathVariable String email){
+    public UserInformationDTO getUserByEmail(@PathVariable String email){
         System.out.println(ANSI_PURPLE + "Here!!!!!!!!" + RESET);
         return userService.getByEmail(email);
     }

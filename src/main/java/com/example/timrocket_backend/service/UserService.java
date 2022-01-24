@@ -3,6 +3,7 @@ package com.example.timrocket_backend.service;
 import com.example.timrocket_backend.domain.User;
 import com.example.timrocket_backend.exception.AccessProfileException;
 import com.example.timrocket_backend.repository.UserRepository;
+import com.example.timrocket_backend.security.SecurityServiceInterface;
 import com.example.timrocket_backend.security.SecurityUserDTO;
 import com.example.timrocket_backend.security.SecurityService;
 import com.example.timrocket_backend.service.dto.CreateUserDTO;
@@ -29,9 +30,9 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final SecurityService securityService;
+    private final SecurityServiceInterface securityService;
 
-    public UserService(UserRepository userRepository, UserMapper userMapper, SecurityService securityService) {
+    public UserService(UserRepository userRepository, UserMapper userMapper, SecurityServiceInterface securityService) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.securityService = securityService;

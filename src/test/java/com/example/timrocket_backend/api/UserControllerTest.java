@@ -1,9 +1,9 @@
 package com.example.timrocket_backend.api;
 
-import com.example.timrocket_backend.domain.Member;
-import com.example.timrocket_backend.repository.MemberRepository;
-import com.example.timrocket_backend.service.dto.CreateMemberDTO;
-import com.example.timrocket_backend.service.dto.MemberDTO;
+import com.example.timrocket_backend.domain.User;
+import com.example.timrocket_backend.repository.UserRepository;
+import com.example.timrocket_backend.service.dto.CreateUserDTO;
+import com.example.timrocket_backend.service.dto.UserDTO;
 import io.restassured.RestAssured;
 import io.restassured.parsing.Parser;
 import org.assertj.core.api.Assertions;
@@ -18,22 +18,22 @@ import static io.restassured.http.ContentType.JSON;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-public class MemberControllerTest {
+public class UserControllerTest {
 
     @LocalServerPort
     private int port;
 
     @Autowired
-    MemberRepository memberRepository;
+    UserRepository userRepository;
 
     @Test
-    void endToEndRegisterMember() {
-        CreateMemberDTO createMemberDTO = new CreateMemberDTO("Test", "Test", "test@test.aaa", "Testtest1", null);
+    void endToEndRegisterUser() {
+        CreateUserDTO createUserDTO = new CreateUserDTO("Test", "Test", "test@test.aaa", "Testtest1", null);
 
         RestAssured.defaultParser = Parser.JSON;
-        MemberDTO memberDTO = RestAssured
+        UserDTO userDTO = RestAssured
                 .given()
-                .body(createMemberDTO)
+                .body(createUserDTO)
                 .accept(JSON)
                 .contentType(JSON)
                 .when()
@@ -42,21 +42,21 @@ public class MemberControllerTest {
                 .then().assertThat()
                 .statusCode(HttpStatus.CREATED.value())
                 .extract()
-                .as(MemberDTO.class);
+                .as(UserDTO.class);
 
-        Assertions.assertThat(memberDTO.firstName()).isEqualTo("Test");
-        Member member = memberRepository.getById(memberDTO.id());
-        Assertions.assertThat(member.getPassword()).isEqualTo("f295398e1493b806b25cd34a73068a31e7e5616f7243b9fe1baead82d6fc5ec8");
+        Assertions.assertThat(userDTO.firstName()).isEqualTo("Test");
+        User user = userRepository.getById(userDTO.id());
+        Assertions.assertThat(user.getPassword()).isEqualTo("f295398e1493b806b25cd34a73068a31e7e5616f7243b9fe1baead82d6fc5ec8");
     }
 
     @Test
-    void endToEndRegisterMember_whenLastNameIsEmpty() {
-        CreateMemberDTO createMemberDTO = new CreateMemberDTO("Test", "", "test@test.aaa", "Testtest1", null);
+    void endToEndRegisterUser_whenLastNameIsEmpty() {
+        CreateUserDTO createUserDTO = new CreateUserDTO("Test", "", "test@test.aaa", "Testtest1", null);
 
         RestAssured.defaultParser = Parser.JSON;
         String message = RestAssured
                 .given()
-                .body(createMemberDTO)
+                .body(createUserDTO)
                 .accept(JSON)
                 .contentType(JSON)
                 .when()
