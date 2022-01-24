@@ -81,6 +81,7 @@ public class MemberController {
     @GetMapping(produces = APPLICATION_JSON_VALUE, path = "/{email}")
     @ResponseStatus(HttpStatus.OK)
     public MemberInformationDTO getMemberByEmail(@PathVariable String email){
+        System.out.println(ANSI_PURPLE + "Here!!!!!!!!" + RESET);
         return memberService.getByEmail(email);
     }
 }
