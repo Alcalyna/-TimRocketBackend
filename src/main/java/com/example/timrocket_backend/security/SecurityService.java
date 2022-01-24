@@ -17,8 +17,9 @@ import org.springframework.stereotype.Service;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
+@Profile("!test")
 @Service
-public class SecurityService {
+public class SecurityService implements SecurityServiceInterface{
     private final RealmResource realmResource;
     private final String clientId;
 
@@ -29,7 +30,7 @@ public class SecurityService {
         this.realmResource = keycloak.realm(realmName);
     }
 
-    @Profile("!test")
+    @Override
     public String addMember(SecurityMemberDTO securityMemberDTO) {
         String createdMemberId = createMember(securityMemberDTO);
         getMember(createdMemberId).resetPassword(createCredentialRepresentation(securityMemberDTO.password()));
@@ -37,9 +38,9 @@ public class SecurityService {
         return createdMemberId;
     }
 
-    public void deleteMember(String MemberId) {
-        getMember(MemberId).remove();
-    }
+//    public void deleteMember(String MemberId) {
+//        getMember(MemberId).remove();
+//    }
 
     private String createMember(SecurityMemberDTO securityMemberDTO) {
         try {

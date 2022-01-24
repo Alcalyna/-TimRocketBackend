@@ -1,6 +1,7 @@
 package com.example.timrocket_backend.api;
 
 import com.example.timrocket_backend.security.SecurityService;
+import com.example.timrocket_backend.security.SecurityServiceInterface;
 import com.example.timrocket_backend.service.MemberService;
 import com.example.timrocket_backend.service.dto.CreateMemberDTO;
 import com.example.timrocket_backend.service.dto.MemberDTO;
@@ -28,9 +29,9 @@ public class MemberController {
 
     private final MemberService memberService;
     private final Logger logger;
-    private final SecurityService securityService;
+    private final SecurityServiceInterface securityService;
 
-    public MemberController(MemberService memberService, SecurityService securityService) {
+    public MemberController(MemberService memberService, SecurityServiceInterface securityService) {
         this.memberService = memberService;
         this.securityService = securityService;
         this.logger = LoggerFactory.getLogger(MemberController.class);

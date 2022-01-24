@@ -5,6 +5,7 @@ import com.example.timrocket_backend.exception.AccessProfileException;
 import com.example.timrocket_backend.repository.MemberRepository;
 import com.example.timrocket_backend.security.SecurityMemberDTO;
 import com.example.timrocket_backend.security.SecurityService;
+import com.example.timrocket_backend.security.SecurityServiceInterface;
 import com.example.timrocket_backend.service.dto.CreateMemberDTO;
 import com.example.timrocket_backend.service.dto.MemberDTO;
 import com.example.timrocket_backend.service.dto.MemberInformationDTO;
@@ -29,9 +30,9 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final MemberMapper memberMapper;
-    private final SecurityService securityService;
+    private final SecurityServiceInterface securityService;
 
-    public MemberService(MemberRepository memberRepository, MemberMapper memberMapper, SecurityService securityService) {
+    public MemberService(MemberRepository memberRepository, MemberMapper memberMapper, SecurityServiceInterface securityService) {
         this.memberRepository = memberRepository;
         this.memberMapper = memberMapper;
         this.securityService = securityService;
