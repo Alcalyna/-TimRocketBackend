@@ -12,6 +12,6 @@ public class PasswordValidator implements ConstraintValidator<PasswordConstraint
     public boolean isValid(String password, ConstraintValidatorContext cxt) {
         return password !=null &&
                 password.trim().length() !=0 &&
-                password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$");
+                password.matches("^(?=.{8,}$)(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9]).*$");
     }
 }
