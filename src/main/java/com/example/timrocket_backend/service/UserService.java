@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
+import java.util.UUID;
 
 
 @Service
@@ -44,5 +45,11 @@ public class UserService {
         User user = userRepository.findByEmail(email);
         UserDTO userDto= userMapper.userToUserDto(user);
         return userDto;
+    }
+
+    public UserDTO getById(UUID id) {
+        User user = userRepository.getById(id);
+        UserDTO userDTO = userMapper.userToUserDto(user);
+        return userDTO;
     }
 }

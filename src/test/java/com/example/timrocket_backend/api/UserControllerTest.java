@@ -123,4 +123,29 @@ public class UserControllerTest {
         Assertions.assertEquals(SecurityRole.COACHEE.getRoleName().toUpperCase(), userDTO.role());
         Assertions.assertEquals("assets/default-profile-picture.jpg", userDTO.pictureUrl());
     }
+
+    @Test
+    void getById() {
+        User user = new User("Ruben", "Tom", "ruben@tom.com", "RubenTom30", null, SecurityRole.COACHEE);
+
+        userRepository.save(user);
+
+        UserDTO userDTO = RestAssured
+                .given()
+                .header("Authorization", "Bearer " + token)
+                .accept(ContentType.JSON)
+                .contentType(ContentType.JSON)
+                .when()
+                .port(port)
+                .queryParam("id", user.getId())
+                .get("/users/")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .extract()
+                .as(UserDTO.class);
+
+        Assertions.assertEquals("Ruben", userDTO.firstName());
+        Assertions.assertEquals("Tom", userDTO.lastName());
+    }
 }

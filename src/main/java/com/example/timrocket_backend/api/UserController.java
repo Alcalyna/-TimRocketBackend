@@ -15,6 +15,7 @@ import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -57,6 +58,12 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public UserDTO getUserByEmail(@PathVariable String email){
         return userService.getByEmail(email);
+    }
+
+    @GetMapping(produces = APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public UserDTO getUserById(@RequestParam UUID id){
+        return userService.getById(id);
     }
 }
 
