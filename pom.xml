@@ -98,6 +98,7 @@
                 <configuration>
                     <excludes>
                         <exclude>**/security/**</exclude>
+                        <exclude>**/TimRocketBackendApplication</exclude>
                     </excludes>
                 </configuration>
 
