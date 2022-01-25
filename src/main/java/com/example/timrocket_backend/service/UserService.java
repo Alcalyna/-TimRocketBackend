@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -44,5 +46,11 @@ public class UserService {
         User user = userRepository.findByEmail(email);
         UserDTO userDto= userMapper.userToUserDto(user);
         return userDto;
+    }
+
+    public List<UserDTO> getAllUsers() {
+        return userRepository.findAll().stream()
+                .map(user -> userMapper.userToUserDto(user))
+                .collect(Collectors.toList());
     }
 }

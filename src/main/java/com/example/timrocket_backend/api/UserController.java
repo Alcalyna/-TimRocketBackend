@@ -58,5 +58,11 @@ public class UserController {
     public UserDTO getUserByEmail(@PathVariable String email){
         return userService.getByEmail(email);
     }
+
+    @GetMapping(produces = APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public List<UserDTO> getAllUsers() {
+        return userService.getAllUsers();
+    }
 }
 

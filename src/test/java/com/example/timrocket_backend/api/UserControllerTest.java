@@ -17,7 +17,10 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.*;
+
 import static io.restassured.http.ContentType.JSON;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -122,5 +125,31 @@ public class UserControllerTest {
         Assertions.assertEquals("Calinh Corp", userDTO.company());
         Assertions.assertEquals(SecurityRole.COACHEE.getRoleName().toUpperCase(), userDTO.role());
         Assertions.assertEquals("assets/default-profile-picture.jpg", userDTO.pictureUrl());
+    }
+
+    @Test
+    void getAllUsers() {
+        User user1 = new User("Linh", "Calinh", "linh@timrocket.com", "Linhlinh1", "Calinh Corp", SecurityRole.COACHEE);
+        User user2 = new User("Léonie", "Bouchat", "leo@timrocket.com", "Leoleo11", "Tim Roquet", SecurityRole.COACHEE);
+
+        userRepository.save(user1);
+        userRepository.save(user2);
+
+        List<UserDTO> userDTOList = RestAssured
+                .given()
+                .header("Authorization", "Bearer " + token)
+                .accept(ContentType.JSON)
+                .contentType(ContentType.JSON)
+                .when()
+                .port(port)
+                .get("/users")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .extract()
+                .jsonPath()
+                .getList(".", UserDTO.class);
+
+        assertThat(userDTOList.size() > 1);
     }
 }
