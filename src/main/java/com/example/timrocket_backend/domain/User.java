@@ -49,11 +49,6 @@ public class User {
         this.pictureUrl = DEFAULT_PROFILE_PICTURE;
     }
 
-    public User(String firstName, String lastName, String email, String password, String company, SecurityRole role, String pictureUrl) {
-        this(firstName, lastName, email, password, company, role);
-        this.pictureUrl = pictureUrl;
-    }
-
     public User() {
     }
 
