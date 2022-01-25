@@ -4,7 +4,6 @@ import com.example.timrocket_backend.domain.User;
 import com.example.timrocket_backend.security.SecurityRole;
 import com.example.timrocket_backend.service.dto.CreateUserDTO;
 import com.example.timrocket_backend.service.dto.UserDTO;
-import com.example.timrocket_backend.service.dto.UserInformationDTO;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -16,17 +15,9 @@ public class UserMapper {
     }
 
     public UserDTO userToUserDto(User user) {
-        UserDTO userDTO = new UserDTO(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getCompany());
+        UserDTO userDTO = new UserDTO(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getCompany(), user.getRole().name(), user.getPictureUrl());
         return userDTO;
     }
 
-    public UserInformationDTO userToUserInformationDto(User user) {
-        return new UserInformationDTO().setFirstName(user.getFirstName())
-                .setLastName(user.getLastName())
-                .setEmail(user.getEmail())
-                .setCompany(user.getCompany())
-                .setRole(user.getRoleName())
-                .setPictureUrl(user.getPictureUrl());
-    }
 }
 
