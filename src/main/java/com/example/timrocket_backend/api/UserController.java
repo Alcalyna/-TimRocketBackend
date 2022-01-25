@@ -1,10 +1,10 @@
 package com.example.timrocket_backend.api;
 
-import com.example.timrocket_backend.security.SecurityService;
-import com.example.timrocket_backend.service.MemberService;
-import com.example.timrocket_backend.service.dto.CreateMemberDTO;
-import com.example.timrocket_backend.service.dto.MemberDTO;
-import com.example.timrocket_backend.service.dto.MemberInformationDTO;
+import com.example.timrocket_backend.service.UserService;
+import com.example.timrocket_backend.service.dto.CreateUserDTO;
+import com.example.timrocket_backend.service.dto.UserDTO;
+import com.example.timrocket_backend.service.dto.UserInformationDTO;
+import com.example.timrocket_backend.security.SecurityServiceInterface;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -21,32 +21,32 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @RequestMapping(path = "/members")
-public class MemberController {
+public class UserController {
 
     public static final String ANSI_PURPLE = "\u001B[35m";
     public static final String RESET = "\u001B[0m";
 
-    private final MemberService memberService;
+    private final UserService userService;
     private final Logger logger;
-    private final SecurityService securityService;
+    private final SecurityServiceInterface securityService;
 
-    public MemberController(MemberService memberService, SecurityService securityService) {
-        this.memberService = memberService;
+    public UserController(UserService userService, SecurityServiceInterface securityService) {
+        this.userService = userService;
         this.securityService = securityService;
-        this.logger = LoggerFactory.getLogger(MemberController.class);
+        this.logger = LoggerFactory.getLogger(UserController.class);
     }
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public MemberDTO createMember(@Valid @RequestBody CreateMemberDTO createMemberDTO){
-        MemberDTO memberDTO = memberService.createMember(createMemberDTO);
-        return memberDTO;
+    public UserDTO createUser(@Valid @RequestBody CreateUserDTO createUserDTO){
+        UserDTO userDTO = userService.createUser(createUserDTO);
+        return userDTO;
     }
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public List<MemberDTO> getMembers() {
-        return memberService.getAllMembers();
+    public List<UserDTO> getUsers() {
+        return userService.getAllUsers();
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -80,9 +80,9 @@ public class MemberController {
 
     @GetMapping(produces = APPLICATION_JSON_VALUE, path = "/{email}")
     @ResponseStatus(HttpStatus.OK)
-    public MemberInformationDTO getMemberByEmail(@PathVariable String email){
+    public UserInformationDTO getUserByEmail(@PathVariable String email){
         System.out.println(ANSI_PURPLE + "Here!!!!!!!!" + RESET);
-        return memberService.getByEmail(email);
+        return userService.getByEmail(email);
     }
 }
 
