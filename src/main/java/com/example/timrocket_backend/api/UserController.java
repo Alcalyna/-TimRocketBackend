@@ -3,7 +3,6 @@ package com.example.timrocket_backend.api;
 import com.example.timrocket_backend.service.UserService;
 import com.example.timrocket_backend.service.dto.CreateUserDTO;
 import com.example.timrocket_backend.service.dto.UserDTO;
-import com.example.timrocket_backend.service.dto.UserInformationDTO;
 import com.example.timrocket_backend.security.SecurityServiceInterface;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,11 +19,8 @@ import java.util.Map;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping(path = "/members")
+@RequestMapping(path = "/users")
 public class UserController {
-
-    public static final String ANSI_PURPLE = "\u001B[35m";
-    public static final String RESET = "\u001B[0m";
 
     private final UserService userService;
     private final Logger logger;
@@ -63,25 +59,9 @@ public class UserController {
         return errors;
     }
 
-//    @GetMapping(produces = APPLICATION_JSON_VALUE, path = "/{id}")
-//    @ResponseStatus(HttpStatus.OK)
-//    @PreAuthorize("hasAnyAuthority('GET_MEMBER_INFORMATION')")
-//    public MemberInformationDTO getMemberInformation(@PathVariable UUID id, @RequestBody UserLoggedDTO userLoggedDTO) {
-//        System.out.println(ANSI_PURPLE + " Step 1 " + RESET);
-//        Member loggedMember = memberService.getMemberByEmail(userLoggedDTO);
-//        System.out.println(ANSI_PURPLE + " Step 2 " + RESET);
-//        memberService.isLoggedIn(loggedMember.getId(), id);
-//        System.out.println(ANSI_PURPLE + " Step 3 " + RESET);
-//        MemberInformationDTO memberInfo = memberService.getInformation(loggedMember);
-//        System.out.println(ANSI_PURPLE + " Step 4 " + RESET);
-//        return memberInfo;
-//    }
-
-
     @GetMapping(produces = APPLICATION_JSON_VALUE, path = "/{email}")
     @ResponseStatus(HttpStatus.OK)
-    public UserInformationDTO getUserByEmail(@PathVariable String email){
-        System.out.println(ANSI_PURPLE + "Here!!!!!!!!" + RESET);
+    public UserDTO getUserByEmail(@PathVariable String email){
         return userService.getByEmail(email);
     }
 }

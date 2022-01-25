@@ -6,7 +6,9 @@ public record UserDTO(UUID id,
                       String firstName,
                       String lastName,
                       String email,
-                      String company) {
+                      String company,
+                      String role,
+                      String pictureUrl) {
 
 }
 

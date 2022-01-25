@@ -5,10 +5,8 @@ import com.example.timrocket_backend.exception.AccessProfileException;
 import com.example.timrocket_backend.repository.UserRepository;
 import com.example.timrocket_backend.security.SecurityServiceInterface;
 import com.example.timrocket_backend.security.SecurityUserDTO;
-import com.example.timrocket_backend.security.SecurityService;
 import com.example.timrocket_backend.service.dto.CreateUserDTO;
 import com.example.timrocket_backend.service.dto.UserDTO;
-import com.example.timrocket_backend.service.dto.UserInformationDTO;
 import com.example.timrocket_backend.service.dto.UserLoggedDTO;
 import com.example.timrocket_backend.service.mapper.UserMapper;
 import org.springframework.stereotype.Service;
@@ -56,22 +54,9 @@ public class UserService {
         }
     }
 
-    public UserInformationDTO getInformation(User loggedUser) {
-        System.out.println(ANSI_PURPLE + "I am getting the info " + RESET);
-        UserInformationDTO userInformationDTO = userMapper.userToUserInformationDto(loggedUser);
-        return userInformationDTO;
-    }
-
-    public User getUserByEmail(UserLoggedDTO userLoggedDTO) {
-        System.out.println(ANSI_PURPLE + "I am getting the member by Email " + RESET);
-        User res = userRepository.findByEmail(userLoggedDTO.getEmail());
-        System.out.println(ANSI_PURPLE + res.getEmail() + RESET);
-        return res;
-    }
-
-    public UserInformationDTO getByEmail(String email) {
+    public UserDTO getByEmail(String email) {
         User user = userRepository.findByEmail(email);
-        UserInformationDTO userInformationDTO = userMapper.userToUserInformationDto(user);
-        return userInformationDTO;
+        UserDTO userDTO = userMapper.userToUserDto(user);
+        return userDTO;
     }
 }

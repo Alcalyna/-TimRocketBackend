@@ -2,11 +2,14 @@ package com.example.timrocket_backend.api;
 
 import com.example.timrocket_backend.domain.User;
 import com.example.timrocket_backend.repository.UserRepository;
+import com.example.timrocket_backend.security.SecurityRole;
 import com.example.timrocket_backend.service.dto.CreateUserDTO;
 import com.example.timrocket_backend.service.dto.UserDTO;
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import io.restassured.parsing.Parser;
-import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,6 +29,27 @@ public class UserControllerTest {
     @Autowired
     UserRepository userRepository;
 
+    private String url;
+    private String token;
+    String userUrlEncoded;
+
+    public static final String ANSI_PURPLE = "\u001B[35m";
+    public static final String RESET = "\u001B[0m";
+
+    @BeforeEach
+    void init() {
+        url = "https://keycloak.switchfully.com/auth/realms/java-oct-2021/protocol/openid-connect/token";
+        userUrlEncoded = "client_id=CodeCoachTimRocket&username=william&password=william&grant_type=password";
+
+        token = RestAssured.given().auth().preemptive()
+                .basic("temp", "temp")
+                .header("Content-Type", "application/x-www-form-urlencoded")
+                .baseUri("https://keycloak.switchfully.com/auth/realms/java-oct-2021")
+                .body(userUrlEncoded)
+                .post("/protocol/openid-connect/token")
+                .then().extract().path("access_token").toString();
+    }
+
     @Test
     void endToEndRegisterUser() {
         CreateUserDTO createUserDTO = new CreateUserDTO("Test", "Test", "test@test.aaa", "Testtest1", null);
@@ -38,15 +62,15 @@ public class UserControllerTest {
                 .contentType(JSON)
                 .when()
                 .port(port)
-                .post("/members")
+                .post("/users")
                 .then().assertThat()
                 .statusCode(HttpStatus.CREATED.value())
                 .extract()
                 .as(UserDTO.class);
 
-        Assertions.assertThat(userDTO.firstName()).isEqualTo("Test");
+        Assertions.assertEquals("Test",userDTO.firstName());
         User user = userRepository.getById(userDTO.id());
-        Assertions.assertThat(user.getPassword()).isEqualTo("f295398e1493b806b25cd34a73068a31e7e5616f7243b9fe1baead82d6fc5ec8");
+        Assertions.assertEquals("f295398e1493b806b25cd34a73068a31e7e5616f7243b9fe1baead82d6fc5ec8",user.getPassword());
     }
 
     @Test
@@ -61,12 +85,42 @@ public class UserControllerTest {
                 .contentType(JSON)
                 .when()
                 .port(port)
-                .post("/members")
+                .post("/users")
                 .then().assertThat()
                 .statusCode(HttpStatus.BAD_REQUEST.value())
                 .extract()
                 .path("lastName");
 
-        Assertions.assertThat(message).isEqualTo("last name should be provided");
+        Assertions.assertEquals("last name should be provided", message);
+    }
+
+    @Test
+    void getByEmail() {
+        User user = new User("Linh", "Calinh", "linh@timrocket.com", "Linhlinh1", "Calinh Corp", SecurityRole.COACHEE);
+
+        userRepository.save(user);
+
+        UserDTO userDTO = RestAssured
+                .given()
+                .header("Authorization", "Bearer " + token)
+                .accept(ContentType.JSON)
+                .contentType(ContentType.JSON)
+                .when()
+                .port(port)
+                .pathParam("email", "linh@timrocket.com")
+                .get("/users/{email}")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .extract()
+                .as(UserDTO.class);
+
+        Assertions.assertTrue(!userDTO.id().toString().isBlank());
+        Assertions.assertEquals("Linh", userDTO.firstName());
+        Assertions.assertEquals("Calinh", userDTO.lastName());
+        Assertions.assertEquals("linh@timrocket.com", userDTO.email());
+        Assertions.assertEquals("Calinh Corp", userDTO.company());
+        Assertions.assertEquals(SecurityRole.COACHEE.getRoleName().toUpperCase(), userDTO.role());
+        Assertions.assertEquals("assets/default-profile-picture.jpg", userDTO.pictureUrl());
     }
 }
