@@ -100,7 +100,9 @@ class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
      */
     @Override
     public void configure(WebSecurity web) {
-        web.ignoring().antMatchers(HttpMethod.POST,"/members");
+        web.ignoring()
+                .antMatchers(HttpMethod.POST,"/users")
+                .antMatchers("/swagger-ui/**", "/v3/api-docs/**");
     }
 
     /**
