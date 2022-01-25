@@ -35,7 +35,7 @@ public class UserService {
     public UserDTO createUser(CreateUserDTO createUserDTO) {
         User user = userMapper.createUserDtoToUser(createUserDTO);
         userRepository.save(user);
-        securityService.addUser(new SecurityUserDTO(user.getEmail(), user.getPassword(), user.getRole()));
+        securityService.addUser(new SecurityUserDTO(user.getEmail(), createUserDTO.password(), user.getRole()));
         UserDTO userDTO = userMapper.userToUserDto(user);
         return userDTO;
     }
