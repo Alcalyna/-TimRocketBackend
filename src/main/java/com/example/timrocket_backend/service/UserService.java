@@ -62,16 +62,11 @@ public class UserService {
         return userInformationDTO;
     }
 
-    public User getUserByEmail(UserLoggedDTO userLoggedDTO) {
-        System.out.println(ANSI_PURPLE + "I am getting the member by Email " + RESET);
-        User res = userRepository.findByEmail(userLoggedDTO.getEmail());
-        System.out.println(ANSI_PURPLE + res.getEmail() + RESET);
-        return res;
-    }
 
-    public UserInformationDTO getByEmail(String email) {
+
+    public UserDTO getByEmail(String email) {
         User user = userRepository.findByEmail(email);
-        UserInformationDTO userInformationDTO = userMapper.userToUserInformationDto(user);
-        return userInformationDTO;
+        UserDTO userDto= userMapper.userToUserDto(user);
+        return userDto;
     }
 }
