@@ -42,7 +42,7 @@ public class UserService {
 
     public UserDTO getByEmail(String email) {
         User user = userRepository.findByEmail(email);
-        UserDTO userDTO = userMapper.userToUserDto(user);
-        return userDTO;
+        UserDTO userDto= userMapper.userToUserDto(user);
+        return userDto;
     }
 }
