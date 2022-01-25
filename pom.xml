@@ -98,7 +98,7 @@
                 <configuration>
                     <excludes>
                         <exclude>**/security/**</exclude>
-                        <exclude>**/TimRocketBackendApplication</exclude>
+                        <exclude>**/TimRocketBackendApplication.java</exclude>
                     </excludes>
                 </configuration>
 
