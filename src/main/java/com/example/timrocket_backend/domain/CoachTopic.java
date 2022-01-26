@@ -9,11 +9,24 @@ public class CoachTopic {
     @Id
     @GeneratedValue
     @Column(name = "USER_ID")
-    private UUID id;
+    private UUID userId;
 
-    @Column(name = "TOPIC_ID")
-    private UUID topicId;
+    @ManyToOne
+    @JoinColumn(name = "TOPIC_ID")
+    private Topic topic;
 
     @Column(name= "EXPERIENCE")
-    private int introduction;
+    private int experience;
+
+    public UUID getId() {
+        return userId;
+    }
+
+    public Topic getTopic() {
+        return topic;
+    }
+
+    public int getExperience() {
+        return experience;
+    }
 }

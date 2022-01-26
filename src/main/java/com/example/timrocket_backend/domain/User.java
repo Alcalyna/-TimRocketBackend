@@ -5,6 +5,7 @@ import com.google.common.hash.Hashing;
 
 import javax.persistence.*;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -42,6 +43,10 @@ public class User {
     @OneToOne
     @JoinColumn(name = "USER_ID")
     private CoachInformation coachInformation;
+
+    @OneToMany()
+    @JoinColumn(name = "USER_ID")
+    private List<CoachTopic> coachTopics;
 
     public User(String firstName, String lastName, String email, String password, String company, SecurityRole role) {
         this.firstName = firstName;
@@ -95,5 +100,9 @@ public class User {
 
     public CoachInformation getCoachInformation() {
         return coachInformation;
+    }
+
+    public List<CoachTopic> getCoachTopics() {
+        return coachTopics;
     }
 }

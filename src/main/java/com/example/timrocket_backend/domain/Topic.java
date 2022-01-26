@@ -14,4 +14,12 @@ public class Topic {
 
     @Column(name = "NAME")
     private String name;
+
+    public UUID getTopicId() {
+        return topicId;
+    }
+
+    public String getName() {
+        return name;
+    }
 }
