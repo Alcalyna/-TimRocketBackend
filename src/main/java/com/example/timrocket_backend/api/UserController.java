@@ -1,6 +1,7 @@
 package com.example.timrocket_backend.api;
 
 import com.example.timrocket_backend.service.UserService;
+import com.example.timrocket_backend.service.dto.CoachDTO;
 import com.example.timrocket_backend.service.dto.CreateUserDTO;
 import com.example.timrocket_backend.service.dto.UserDTO;
 import com.example.timrocket_backend.security.SecurityServiceInterface;
@@ -64,6 +65,12 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public UserDTO getUserById(@PathVariable UUID id){
         return userService.getById(id);
+    }
+
+    @GetMapping(produces = APPLICATION_JSON_VALUE, path = "/coach/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public CoachDTO getCoachById(@PathVariable UUID id){
+        return userService.getCoachBy(id);
     }
 }
 

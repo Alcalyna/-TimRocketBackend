@@ -8,13 +8,13 @@ import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 @Entity
-@Table(name = "MEMBERS")
+@Table(name = "CODECOACH_USER")
 public class User {
     private final static String DEFAULT_PROFILE_PICTURE = "assets/default-profile-picture.jpg";
 
     @Id
     @GeneratedValue
-    @Column(name = "ID")
+    @Column(name = "USER_ID")
     private UUID id;
 
     @Column(name = "FIRSTNAME")
@@ -38,6 +38,10 @@ public class User {
 
     @Column(name = "PICTURE_URL")
     private String pictureUrl;
+
+    @OneToOne
+    @JoinColumn(name = "USER_ID")
+    private CoachInformation coachInformation;
 
     public User(String firstName, String lastName, String email, String password, String company, SecurityRole role) {
         this.firstName = firstName;
@@ -89,4 +93,7 @@ public class User {
         return pictureUrl;
     }
 
+    public CoachInformation getCoachInformation() {
+        return coachInformation;
+    }
 }
