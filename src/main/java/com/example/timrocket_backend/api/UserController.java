@@ -54,15 +54,15 @@ public class UserController {
         return errors;
     }
 
-    @GetMapping(produces = APPLICATION_JSON_VALUE, path = "/{email}")
+    @GetMapping(produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public UserDTO getUserByEmail(@PathVariable String email){
+    public UserDTO getUserByEmail(@RequestParam String email){
         return userService.getByEmail(email);
     }
 
-    @GetMapping(produces = APPLICATION_JSON_VALUE)
+    @GetMapping(produces = APPLICATION_JSON_VALUE, path = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public UserDTO getUserById(@RequestParam UUID id){
+    public UserDTO getUserById(@PathVariable UUID id){
         return userService.getById(id);
     }
 }
