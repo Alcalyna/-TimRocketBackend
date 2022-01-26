@@ -39,6 +39,10 @@ public class User {
     @Column(name = "PICTURE_URL")
     private String pictureUrl;
 
+    @OneToOne
+    @JoinColumn(name = "USER_ID")
+    private CoachInformation coachInformation;
+
     public User(String firstName, String lastName, String email, String password, String company, SecurityRole role) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -89,4 +93,7 @@ public class User {
         return pictureUrl;
     }
 
+    public CoachInformation getCoachInformation() {
+        return coachInformation;
+    }
 }

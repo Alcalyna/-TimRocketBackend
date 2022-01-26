@@ -4,8 +4,10 @@ import com.example.timrocket_backend.domain.User;
 import com.example.timrocket_backend.repository.UserRepository;
 import com.example.timrocket_backend.security.SecurityServiceInterface;
 import com.example.timrocket_backend.security.SecurityUserDTO;
+import com.example.timrocket_backend.service.dto.CoachDTO;
 import com.example.timrocket_backend.service.dto.CreateUserDTO;
 import com.example.timrocket_backend.service.dto.UserDTO;
+import com.example.timrocket_backend.service.mapper.CoachMapper;
 import com.example.timrocket_backend.service.mapper.UserMapper;
 import org.springframework.stereotype.Service;
 
@@ -25,11 +27,13 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final CoachMapper coachMapper;
     private final SecurityServiceInterface securityService;
 
-    public UserService(UserRepository userRepository, UserMapper userMapper, SecurityServiceInterface securityService) {
+    public UserService(UserRepository userRepository, UserMapper userMapper, CoachMapper coachMapper, SecurityServiceInterface securityService) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+        this.coachMapper = coachMapper;
         this.securityService = securityService;
     }
 
@@ -51,5 +55,11 @@ public class UserService {
         User user = userRepository.getById(id);
         UserDTO userDTO = userMapper.userToUserDto(user);
         return userDTO;
+    }
+
+    public CoachDTO getCoachBy(UUID id) {
+        User user = userRepository.getById(id);
+        CoachDTO coachDTO = coachMapper.mapUserToCoachDto(user);
+        return coachDTO;
     }
 }
