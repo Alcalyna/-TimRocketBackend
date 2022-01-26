@@ -1,19 +1,22 @@
 package com.example.timrocket_backend.api;
 
+import com.example.timrocket_backend.security.SecurityServiceInterface;
 import com.example.timrocket_backend.service.UserService;
 import com.example.timrocket_backend.service.dto.CreateUserDTO;
+import com.example.timrocket_backend.service.dto.UpdateUserDTO;
 import com.example.timrocket_backend.service.dto.UserDTO;
-import com.example.timrocket_backend.security.SecurityServiceInterface;
+import org.keycloak.adapters.springsecurity.account.SimpleKeycloakAccount;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -57,6 +60,28 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public UserDTO getUserByEmail(@PathVariable String email){
         return userService.getByEmail(email);
+    }
+
+//    @GetMapping(produces = APPLICATION_JSON_VALUE, path = "/{id}")
+//    @ResponseStatus(HttpStatus.OK)
+//    public UserDTO getUserByEmail(@RequestParam String id){
+//        return userService.getById(id);
+//    }
+
+    @PutMapping(produces = APPLICATION_JSON_VALUE, path = "/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAuthority('UPDATE_PROFILE')")
+    public UserDTO updateUser(@PathVariable String id, @RequestBody UpdateUserDTO updateUserDTO, Authentication authentication) {
+//        SimpleKeycloakAccount simpleKeycloakAccount = (SimpleKeycloakAccount)authentication.getDetails();
+//        String s = simpleKeycloakAccount.getKeycloakSecurityContext().getToken().getSubject();
+//        System.out.println(s);
+
+        SimpleKeycloakAccount simpleKeycloakAccount = (SimpleKeycloakAccount)authentication.getDetails();
+//        String s = simpleKeycloakAccount.getKeycloakSecurityContext().getToken().getEmail();
+//        System.out.println(s);
+        String loggedInUserEmailAddress = simpleKeycloakAccount.getKeycloakSecurityContext().getToken().getEmail();
+        UserDTO user = userService.getByEmail(loggedInUserEmailAddress);
+        return userService.updateUser(id, updateUserDTO, user);
     }
 }
 
