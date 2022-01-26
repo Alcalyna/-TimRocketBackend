@@ -1,8 +1,9 @@
 package com.example.timrocket_backend.service.dto;
 
-public record CoachDTO(String firstName,
-                       String introduction) {
+public record CoachDTO(UserDTO user,
+                       CoachInformationDTO coachInformation) {
 
 
 
 }
+

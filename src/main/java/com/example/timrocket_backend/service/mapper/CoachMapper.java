@@ -2,15 +2,24 @@ package com.example.timrocket_backend.service.mapper;
 
 import com.example.timrocket_backend.domain.User;
 import com.example.timrocket_backend.service.dto.CoachDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CoachMapper {
 
+    private final UserMapper userMapper;
+    private final CoachInformationMapper coachInformationMapper;
+
+    @Autowired
+    public CoachMapper(UserMapper userMapper, CoachInformationMapper coachInformationMapper) {
+        this.userMapper = userMapper;
+        this.coachInformationMapper = coachInformationMapper;
+    }
+
     public CoachDTO mapUserToCoachDto(User user){
         return new CoachDTO(
-                user.getFirstName(),
-                user.getCoachInformation().getIntroduction()
-        );
+                userMapper.userToUserDto(user),
+                coachInformationMapper.mapToCoachInformationDTO(user.getCoachInformation()));
     }
 }
