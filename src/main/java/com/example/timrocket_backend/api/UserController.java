@@ -8,6 +8,7 @@ import com.example.timrocket_backend.security.SecurityServiceInterface;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -61,9 +62,9 @@ public class UserController {
         return userService.getByEmail(email);
     }
 
-    @GetMapping(produces = APPLICATION_JSON_VALUE, path="/coach")
+    @GetMapping(produces = APPLICATION_JSON_VALUE, params = {"coach"})
     @ResponseStatus(HttpStatus.OK)
-    public List<CoachDTO> getAllCoaches() {
+    public List<CoachDTO> getAllCoaches(@RequestParam String coach) {
         return userService.getAllCoaches();
     }
 
@@ -73,9 +74,10 @@ public class UserController {
         return userService.getById(id);
     }
 
-    @GetMapping(produces = APPLICATION_JSON_VALUE, path = "/coach/{id}")
+    @PreAuthorize("hasAnyAuthority('GET_COACH_INFORMATION')")
+    @GetMapping(produces = APPLICATION_JSON_VALUE, params = {"coach"}, path = "{id}")
     @ResponseStatus(HttpStatus.OK)
-    public CoachDTO getCoachById(@PathVariable UUID id){
+    public CoachDTO getCoachById(@PathVariable UUID id, @RequestParam String coach){
         return userService.getCoachBy(id);
     }
 }
