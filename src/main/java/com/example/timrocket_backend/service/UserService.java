@@ -61,8 +61,8 @@ public class UserService {
                 .setLastName(updateUserDTO.lastName())
                 .setEmail(updateUserDTO.email())
                 .setCompany(updateUserDTO.company())
-                .setRole(SecurityRole.getByName(updateUserDTO.role()))
-                .setPictureUrl(updateUserDTO.pictureUrl());
+                .setRole(SecurityRole.getByName(updateUserDTO.role()));
+
 
 //        userRepository.save(userToUpdate); --> @Transactional is magic
 
