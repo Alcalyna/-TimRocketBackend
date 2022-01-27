@@ -1,4 +1,4 @@
-package com.example.timrocket_backend.domain;
+package com.example.timrocket_backend.domain.topic;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -16,8 +16,9 @@ public class CoachTopic {
     @JoinColumn(name = "TOPIC_ID")
     private Topic topic;
 
+    @Enumerated(EnumType.STRING)
     @Column(name= "EXPERIENCE")
-    private String experience;
+    private TopicExperience experience;
 
     public UUID getId() {
         return userId;
@@ -27,7 +28,7 @@ public class CoachTopic {
         return topic;
     }
 
-    public String getExperience() {
+    public TopicExperience getExperience() {
         return experience;
     }
 }

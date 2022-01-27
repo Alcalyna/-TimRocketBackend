@@ -1,6 +1,6 @@
 package com.example.timrocket_backend.service.mapper;
 
-import com.example.timrocket_backend.domain.CoachTopic;
+import com.example.timrocket_backend.domain.topic.CoachTopic;
 import com.example.timrocket_backend.service.dto.CoachTopicDTO;
 import org.springframework.stereotype.Component;
 

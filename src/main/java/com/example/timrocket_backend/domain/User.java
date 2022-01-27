@@ -1,5 +1,6 @@
 package com.example.timrocket_backend.domain;
 
+import com.example.timrocket_backend.domain.topic.CoachTopic;
 import com.example.timrocket_backend.security.SecurityRole;
 import com.google.common.hash.Hashing;
 

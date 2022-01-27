@@ -1,4 +1,4 @@
-package com.example.timrocket_backend.domain;
+package com.example.timrocket_backend.domain.topic;
 
 import javax.persistence.*;
 import java.util.UUID;
