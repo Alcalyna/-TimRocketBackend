@@ -3,6 +3,7 @@ package com.example.timrocket_backend.api;
 import com.example.timrocket_backend.domain.User;
 import com.example.timrocket_backend.repository.UserRepository;
 import com.example.timrocket_backend.security.SecurityRole;
+import com.example.timrocket_backend.service.dto.CoachDTO;
 import com.example.timrocket_backend.service.dto.CreateUserDTO;
 import com.example.timrocket_backend.service.dto.UserDTO;
 import io.restassured.RestAssured;
@@ -10,12 +11,15 @@ import io.restassured.http.ContentType;
 import io.restassured.parsing.Parser;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
+
+import java.util.Collections;
 
 import static io.restassured.http.ContentType.JSON;
 
@@ -30,22 +34,38 @@ public class UserControllerTest {
     UserRepository userRepository;
 
     private String url;
-    private String token;
+    private String coachToken;
+
+    private String coacheeToken;
+
     String userUrlEncoded;
+    String coacheeUrlEncoded;
+
 
     public static final String ANSI_PURPLE = "\u001B[35m";
     public static final String RESET = "\u001B[0m";
 
     @BeforeEach
     void init() {
+
         url = "https://keycloak.switchfully.com/auth/realms/java-oct-2021/protocol/openid-connect/token";
         userUrlEncoded = "client_id=CodeCoachTimRocket&username=william&password=william&grant_type=password";
+        coacheeUrlEncoded = "client_id=CodeCoachTimRocket&username=linh@timrocket.com&password=Linhlinh1&grant_type=password";
 
-        token = RestAssured.given().auth().preemptive()
+        coachToken = RestAssured.given().auth().preemptive()
                 .basic("temp", "temp")
                 .header("Content-Type", "application/x-www-form-urlencoded")
                 .baseUri("https://keycloak.switchfully.com/auth/realms/java-oct-2021")
                 .body(userUrlEncoded)
+                .post("/protocol/openid-connect/token")
+                .then().extract().path("access_token").toString();
+
+
+        coacheeToken = RestAssured.given().auth().preemptive()
+                .basic("temp", "temp")
+                .header("Content-Type", "application/x-www-form-urlencoded")
+                .baseUri("https://keycloak.switchfully.com/auth/realms/java-oct-2021")
+                .body(coacheeUrlEncoded)
                 .post("/protocol/openid-connect/token")
                 .then().extract().path("access_token").toString();
     }
@@ -102,7 +122,7 @@ public class UserControllerTest {
 
         UserDTO userDTO = RestAssured
                 .given()
-                .header("Authorization", "Bearer " + token)
+                .header("Authorization", "Bearer " + coachToken)
                 .accept(ContentType.JSON)
                 .contentType(ContentType.JSON)
                 .when()
@@ -132,7 +152,7 @@ public class UserControllerTest {
 
         UserDTO userDTO = RestAssured
                 .given()
-                .header("Authorization", "Bearer " + token)
+                .header("Authorization", "Bearer " + coachToken)
                 .accept(ContentType.JSON)
                 .contentType(ContentType.JSON)
                 .when()
@@ -147,5 +167,48 @@ public class UserControllerTest {
 
         Assertions.assertEquals("Ruben", userDTO.firstName());
         Assertions.assertEquals("Tom", userDTO.lastName());
+    }
+
+    @Test
+    @DisplayName("Given an authorized user, when getting coach by id, then return the coach information")
+    void getCoachByIdAsAuthorizedUser() {
+
+        CoachDTO coachDTO = RestAssured
+                .given()
+                .header("Authorization", "Bearer " + coachToken)
+                .accept(ContentType.JSON)
+                .contentType(ContentType.JSON)
+                .when()
+                .port(port)
+                .pathParam("id", "96f7383e-67c1-4cb9-936c-a046d13f7fec")
+                .get("/users/coach/{id}")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .extract()
+                .as(CoachDTO.class);
+
+        Assertions.assertEquals("Tom", coachDTO.user().firstName());
+        Assertions.assertEquals( "Dit is een test introductie" , coachDTO.coachInformation().introduction());
+        Assertions.assertNotEquals( Collections.EMPTY_LIST, coachDTO.coachTopics());
+    }
+
+    @Test
+    @DisplayName("Given an authorized user, when getting coach by id, then return the coach information")
+    void getErrorWhenGetCoachByIdAsUnauthorizedUser() {
+
+        RestAssured
+                .given()
+                .header("Authorization", "Bearer " + coacheeToken)
+                .accept(ContentType.JSON)
+                .contentType(ContentType.JSON)
+                .when()
+                .port(port)
+                .pathParam("id", "96f7383e-67c1-4cb9-936c-a046d13f7fec")
+                .get("/users/coach/{id}")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.FORBIDDEN.value());
+
     }
 }

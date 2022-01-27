@@ -8,6 +8,7 @@ import com.example.timrocket_backend.security.SecurityServiceInterface;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -67,6 +68,7 @@ public class UserController {
         return userService.getById(id);
     }
 
+    @PreAuthorize("hasAuthority('GET_COACH_INFORMATION')")
     @GetMapping(produces = APPLICATION_JSON_VALUE, path = "/coach/{id}")
     @ResponseStatus(HttpStatus.OK)
     public CoachDTO getCoachById(@PathVariable UUID id){
