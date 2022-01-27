@@ -194,7 +194,7 @@ public class UserControllerTest {
     }
 
     @Test
-    @DisplayName("Given an authorized user, when getting coach by id, then return the coach information")
+    @DisplayName("Given an unauthorized user, when getting coach by id, then return 403 forbidden")
     void getErrorWhenGetCoachByIdAsUnauthorizedUser() {
 
         RestAssured

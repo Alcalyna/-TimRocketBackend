@@ -69,9 +69,9 @@ public class UserController {
     }
 
     @PreAuthorize("hasAuthority('GET_COACH_INFORMATION')")
-    @GetMapping(produces = APPLICATION_JSON_VALUE, path = "/coach/{id}")
+    @GetMapping(produces = APPLICATION_JSON_VALUE, params = {"coach"}, path = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public CoachDTO getCoachById(@PathVariable UUID id){
+    public CoachDTO getCoachById(@PathVariable UUID id, @RequestParam String coach){
         return userService.getCoachBy(id);
     }
 }
