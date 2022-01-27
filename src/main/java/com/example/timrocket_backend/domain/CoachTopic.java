@@ -4,19 +4,20 @@ import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
+@IdClass(CoachTopicId.class)
 @Table(name = "COACH_TOPIC")
 public class CoachTopic {
     @Id
-    @GeneratedValue
     @Column(name = "USER_ID")
     private UUID userId;
 
+    @Id
     @ManyToOne
     @JoinColumn(name = "TOPIC_ID")
     private Topic topic;
 
     @Column(name= "EXPERIENCE")
-    private int experience;
+    private String experience;
 
     public UUID getId() {
         return userId;
@@ -26,7 +27,7 @@ public class CoachTopic {
         return topic;
     }
 
-    public int getExperience() {
+    public String getExperience() {
         return experience;
     }
 }
