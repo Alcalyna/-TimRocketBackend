@@ -72,7 +72,7 @@ public class UserControllerTest {
                 .as(UserDTO.class);
 
         Assertions.assertEquals("Test",userDTO.firstName());
-        User user = userRepository.getById(userDTO.id());
+        User user = userRepository.getById(userDTO.userId());
         Assertions.assertEquals("f295398e1493b806b25cd34a73068a31e7e5616f7243b9fe1baead82d6fc5ec8",user.getPassword());
     }
 
@@ -110,15 +110,15 @@ public class UserControllerTest {
                 .contentType(ContentType.JSON)
                 .when()
                 .port(port)
-                .pathParam("email", "linh@timrocket.com")
-                .get("/users/{email}")
+                .queryParam("email", "linh@timrocket.com")
+                .get("/users/")
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.OK.value())
                 .extract()
                 .as(UserDTO.class);
 
-        Assertions.assertTrue(!userDTO.id().toString().isBlank());
+        Assertions.assertTrue(!userDTO.userId().toString().isBlank());
         Assertions.assertEquals("Linh", userDTO.firstName());
         Assertions.assertEquals("Calinh", userDTO.lastName());
         Assertions.assertEquals("linh@timrocket.com", userDTO.email());
@@ -151,5 +151,30 @@ public class UserControllerTest {
                 .getList(".", UserDTO.class);
 
         assertThat(userDTOList.size() > 1);
+    }
+
+    @Test
+    void getById() {
+        User user = new User("Ruben", "Tom", "ruben@tom.com", "RubenTom30", null, SecurityRole.COACHEE);
+
+        userRepository.save(user);
+
+        UserDTO userDTO = RestAssured
+                .given()
+                .header("Authorization", "Bearer " + token)
+                .accept(ContentType.JSON)
+                .contentType(ContentType.JSON)
+                .when()
+                .port(port)
+                .pathParam("id", user.getId())
+                .get("/users/{id}")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .extract()
+                .as(UserDTO.class);
+
+        Assertions.assertEquals("Ruben", userDTO.firstName());
+        Assertions.assertEquals("Tom", userDTO.lastName());
     }
 }

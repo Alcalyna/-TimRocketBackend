@@ -13,6 +13,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.UUID;
 
 
 @Service
@@ -26,18 +27,20 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final CoachMapper coachMapper;
     private final SecurityServiceInterface securityService;
 
-    public UserService(UserRepository userRepository, UserMapper userMapper, SecurityServiceInterface securityService) {
+    public UserService(UserRepository userRepository, UserMapper userMapper, CoachMapper coachMapper, SecurityServiceInterface securityService) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+        this.coachMapper = coachMapper;
         this.securityService = securityService;
     }
 
     public UserDTO createUser(CreateUserDTO createUserDTO) {
         User user = userMapper.createUserDtoToUser(createUserDTO);
         userRepository.save(user);
-        securityService.addUser(new SecurityUserDTO(user.getEmail(), user.getPassword(), user.getRole()));
+        securityService.addUser(new SecurityUserDTO(user.getEmail(), createUserDTO.password(), user.getRole()));
         UserDTO userDTO = userMapper.userToUserDto(user);
         return userDTO;
     }
@@ -52,5 +55,17 @@ public class UserService {
         return userRepository.findAll().stream()
                 .map(user -> userMapper.userToUserDto(user))
                 .collect(Collectors.toList());
+    }
+
+    public UserDTO getById(UUID id) {
+        User user = userRepository.getById(id);
+        UserDTO userDTO = userMapper.userToUserDto(user);
+        return userDTO;
+    }
+
+    public CoachDTO getCoachBy(UUID id) {
+        User user = userRepository.getById(id);
+        CoachDTO coachDTO = coachMapper.mapUserToCoachDto(user);
+        return coachDTO;
     }
 }

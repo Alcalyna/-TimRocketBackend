@@ -1,20 +1,22 @@
 package com.example.timrocket_backend.domain;
 
+import com.example.timrocket_backend.domain.topic.CoachTopic;
 import com.example.timrocket_backend.security.SecurityRole;
 import com.google.common.hash.Hashing;
 
 import javax.persistence.*;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "MEMBERS")
+@Table(name = "CODECOACH_USER")
 public class User {
     private final static String DEFAULT_PROFILE_PICTURE = "assets/default-profile-picture.jpg";
 
     @Id
     @GeneratedValue
-    @Column(name = "ID")
+    @Column(name = "USER_ID")
     private UUID id;
 
     @Column(name = "FIRSTNAME")
@@ -38,6 +40,14 @@ public class User {
 
     @Column(name = "PICTURE_URL")
     private String pictureUrl;
+
+    @OneToOne
+    @JoinColumn(name = "USER_ID")
+    private CoachInformation coachInformation;
+
+    @OneToMany()
+    @JoinColumn(name = "USER_ID")
+    private List<CoachTopic> coachTopics;
 
     public User(String firstName, String lastName, String email, String password, String company, SecurityRole role) {
         this.firstName = firstName;
@@ -89,4 +99,11 @@ public class User {
         return pictureUrl;
     }
 
+    public CoachInformation getCoachInformation() {
+        return coachInformation;
+    }
+
+    public List<CoachTopic> getCoachTopics() {
+        return coachTopics;
+    }
 }
