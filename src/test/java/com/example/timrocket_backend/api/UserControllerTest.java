@@ -118,7 +118,7 @@ public class UserControllerTest {
 
     @Test
     void getByEmail() {
-        User user = new User("Linh", "Calinh", "linh@timrocket.com", "Linhlinh1", "Calinh Corp", SecurityRole.COACHEE);
+        User user = new User("Linh", "Calinh", "blinh@timrocket.com", "Linhlinh1", "Calinh Corp", SecurityRole.COACHEE);
 
         userRepository.save(user);
 
@@ -129,7 +129,7 @@ public class UserControllerTest {
                 .contentType(ContentType.JSON)
                 .when()
                 .port(port)
-                .queryParam("email", "linh@timrocket.com")
+                .queryParam("email", "blinh@timrocket.com")
                 .get("/users/")
                 .then()
                 .assertThat()
@@ -140,7 +140,7 @@ public class UserControllerTest {
         Assertions.assertTrue(!userDTO.userId().toString().isBlank());
         Assertions.assertEquals("Linh", userDTO.firstName());
         Assertions.assertEquals("Calinh", userDTO.lastName());
-        Assertions.assertEquals("linh@timrocket.com", userDTO.email());
+        Assertions.assertEquals("blinh@timrocket.com", userDTO.email());
         Assertions.assertEquals("Calinh Corp", userDTO.company());
         Assertions.assertEquals(SecurityRole.COACHEE.getRoleName().toUpperCase(), userDTO.role());
         Assertions.assertEquals("assets/default-profile-picture.jpg", userDTO.pictureUrl());
@@ -154,20 +154,20 @@ public class UserControllerTest {
         userRepository.save(user1);
         userRepository.save(user2);
 
-        List<UserDTO> userDTOList = RestAssured
+        List<CoachDTO> userDTOList = RestAssured
                 .given()
-                .header("Authorization", "Bearer " + token)
+                .header("Authorization", "Bearer " + coachToken)
                 .accept(ContentType.JSON)
                 .contentType(ContentType.JSON)
                 .when()
                 .port(port)
-                .get("/users")
+                .get("/users?coach=")
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.OK.value())
                 .extract()
                 .jsonPath()
-                .getList(".", UserDTO.class);
+                .getList(".", CoachDTO.class);
 
         assertThat(userDTOList.size() > 1);
     }
@@ -209,7 +209,7 @@ public class UserControllerTest {
                 .when()
                 .port(port)
                 .pathParam("id", "96f7383e-67c1-4cb9-936c-a046d13f7fec")
-                .get("/users/coach/{id}")
+                .get("/users/{id}?coach=")
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.OK.value())
@@ -233,7 +233,7 @@ public class UserControllerTest {
                 .when()
                 .port(port)
                 .pathParam("id", "96f7383e-67c1-4cb9-936c-a046d13f7fec")
-                .get("/users/coach/{id}")
+                .get("/users/{id}?coach=")
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.FORBIDDEN.value());
