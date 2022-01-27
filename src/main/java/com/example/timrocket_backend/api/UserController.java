@@ -55,16 +55,16 @@ public class UserController {
         return errors;
     }
 
-    @GetMapping(produces = APPLICATION_JSON_VALUE)
+    @GetMapping(produces = APPLICATION_JSON_VALUE, params={"email"})
     @ResponseStatus(HttpStatus.OK)
     public UserDTO getUserByEmail(@RequestParam String email){
         return userService.getByEmail(email);
     }
 
-    @GetMapping(produces = APPLICATION_JSON_VALUE)
+    @GetMapping(produces = APPLICATION_JSON_VALUE, path="/coach")
     @ResponseStatus(HttpStatus.OK)
-    public List<UserDTO> getAllUsers() {
-        return userService.getAllUsers();
+    public List<CoachDTO> getAllCoaches() {
+        return userService.getAllCoaches();
     }
 
     @GetMapping(produces = APPLICATION_JSON_VALUE, path = "/{id}")

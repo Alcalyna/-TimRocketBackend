@@ -2,10 +2,13 @@ package com.example.timrocket_backend.service;
 
 import com.example.timrocket_backend.domain.User;
 import com.example.timrocket_backend.repository.UserRepository;
+import com.example.timrocket_backend.security.SecurityRole;
 import com.example.timrocket_backend.security.SecurityServiceInterface;
 import com.example.timrocket_backend.security.SecurityUserDTO;
+import com.example.timrocket_backend.service.dto.CoachDTO;
 import com.example.timrocket_backend.service.dto.CreateUserDTO;
 import com.example.timrocket_backend.service.dto.UserDTO;
+import com.example.timrocket_backend.service.mapper.CoachMapper;
 import com.example.timrocket_backend.service.mapper.UserMapper;
 import org.springframework.stereotype.Service;
 
@@ -51,9 +54,10 @@ public class UserService {
         return userDto;
     }
 
-    public List<UserDTO> getAllUsers() {
+    public List<CoachDTO> getAllCoaches() {
         return userRepository.findAll().stream()
-                .map(user -> userMapper.userToUserDto(user))
+                .filter(user -> user.getRole() == SecurityRole.COACH)
+                .map(user -> coachMapper.mapUserToCoachDto(user))
                 .collect(Collectors.toList());
     }
 
