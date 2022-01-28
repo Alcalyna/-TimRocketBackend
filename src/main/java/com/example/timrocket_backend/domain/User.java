@@ -106,4 +106,51 @@ public class User {
     public List<CoachTopic> getCoachTopics() {
         return coachTopics;
     }
+
+    public User setFirstName(String firstName) {
+        this.firstName = firstName;
+        return this;
+    }
+
+    public User setLastName(String lastName) {
+        this.lastName = lastName;
+        return this;
+    }
+
+    public User setEmail(String email) {
+        this.email = email;
+        return this;
+    }
+
+    public User setCompany(String company) {
+        this.company = company;
+        return this;
+    }
+
+    public User setRole(SecurityRole role) {
+        this.role = role;
+        return this;
+    }
+
+    public User setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", company='" + company + '\'' +
+                ", role=" + role +
+                ", pictureUrl='" + pictureUrl + '\'' +
+                ", coachInformation=" + coachInformation +
+                ", coachTopics=" + coachTopics +
+                '}';
+    }
 }
+
