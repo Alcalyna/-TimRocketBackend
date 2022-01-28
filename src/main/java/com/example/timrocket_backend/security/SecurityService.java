@@ -30,11 +30,12 @@ public class SecurityService implements SecurityServiceInterface{
         this.realmResource = keycloak.realm(realmName);
     }
 
+
     @Override
     public String addUser(SecurityUserDTO securityUserDTO) {
         String createdUserId = createUser(securityUserDTO);
         getUser(createdUserId).resetPassword(createCredentialRepresentation(securityUserDTO.password()));
-        addRole(getUser(createdUserId), securityUserDTO.securityRole().getRoleName());
+        addRole(getUser(createdUserId), securityUserDTO.securityRole().getRoleName().toLowerCase());
         return createdUserId;
     }
 
@@ -92,4 +93,6 @@ public class SecurityService implements SecurityServiceInterface{
     public User getLoggedUser() {
         return null;
     }
+
+
 }
