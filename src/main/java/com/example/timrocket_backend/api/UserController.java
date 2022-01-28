@@ -6,6 +6,7 @@ import com.example.timrocket_backend.service.dto.CreateUserDTO;
 import com.example.timrocket_backend.service.dto.UpdateUserDTO;
 import com.example.timrocket_backend.service.dto.UserDTO;
 import org.keycloak.adapters.springsecurity.account.SimpleKeycloakAccount;
+import org.keycloak.representations.AccessToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -72,14 +73,9 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasAuthority('UPDATE_PROFILE')")
     public UserDTO updateUser(@PathVariable String id, @RequestBody UpdateUserDTO updateUserDTO, Authentication authentication) {
-//        SimpleKeycloakAccount simpleKeycloakAccount = (SimpleKeycloakAccount)authentication.getDetails();
-//        String s = simpleKeycloakAccount.getKeycloakSecurityContext().getToken().getSubject();
-//        System.out.println(s);
-
         SimpleKeycloakAccount simpleKeycloakAccount = (SimpleKeycloakAccount)authentication.getDetails();
-//        String s = simpleKeycloakAccount.getKeycloakSecurityContext().getToken().getEmail();
-//        System.out.println(s);
-        String loggedInUserEmailAddress = simpleKeycloakAccount.getKeycloakSecurityContext().getToken().getEmail();
+        AccessToken token = simpleKeycloakAccount.getKeycloakSecurityContext().getToken();
+        String loggedInUserEmailAddress = token.getPreferredUsername();
         UserDTO user = userService.getByEmail(loggedInUserEmailAddress);
         return userService.updateUser(id, updateUserDTO, user);
     }

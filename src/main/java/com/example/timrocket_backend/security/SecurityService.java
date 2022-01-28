@@ -1,10 +1,7 @@
 package com.example.timrocket_backend.security;
 
 import com.example.timrocket_backend.domain.User;
-import com.example.timrocket_backend.service.UserService;
-import com.example.timrocket_backend.service.dto.UserDTO;
 import com.google.common.collect.Lists;
-import org.keycloak.adapters.springsecurity.account.SimpleKeycloakAccount;
 import org.keycloak.admin.client.CreatedResponseUtil;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.ClientResource;
@@ -15,7 +12,6 @@ import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import javax.ws.rs.WebApplicationException;

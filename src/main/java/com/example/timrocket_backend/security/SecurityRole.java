@@ -8,7 +8,7 @@ import static com.example.timrocket_backend.security.Feature.*;
 
 public enum SecurityRole {
     ADMIN(GET_USER_INFORMATION, UPDATE_PROFILE),
-    COACH(GET_CLASS_TEST, ADD_CLASS_TEST, GET_USER_INFORMATION, UPDATE_PROFILE),
+    COACH(GET_USER_INFORMATION, UPDATE_PROFILE),
     COACHEE(GET_USER_INFORMATION, UPDATE_PROFILE);
 
     private final List<Feature> features;

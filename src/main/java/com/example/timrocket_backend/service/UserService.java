@@ -63,9 +63,6 @@ public class UserService {
                 .setCompany(updateUserDTO.company())
                 .setRole(SecurityRole.getByName(updateUserDTO.role()));
 
-
-//        userRepository.save(userToUpdate); --> @Transactional is magic
-
         return userMapper.userToUserDto(userToUpdate);
     }
 
@@ -73,8 +70,5 @@ public class UserService {
         if (!(SecurityRole.getByName(loggedInUser.role()) == (SecurityRole.ADMIN) || id.equals(loggedInUser.id().toString()))) {
             throw new EditNotAllowedException();
         }
-//        if(SecurityRole.getByName(loggedInUser.role()) != (SecurityRole.ADMIN)) {
-//            throw new EditNotAllowedException();
-//        }
     }
 }
