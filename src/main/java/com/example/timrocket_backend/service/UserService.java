@@ -43,9 +43,6 @@ public class UserService {
 
     public UserDTO createUser(CreateUserDTO createUserDTO) {
         User user = userMapper.createUserDtoToUser(createUserDTO);
-        System.out.println(user);
-//        userRepository.save(user);
-        System.out.println("We are here " + userRepository.save(user));
         userRepository.save(user);
         securityService.addUser(new SecurityUserDTO(user.getEmail(), createUserDTO.password(), user.getRole()));
         UserDTO userDTO = userMapper.userToUserDto(user);
@@ -85,7 +82,6 @@ public class UserService {
             userToUpdate.setFirstName(updateUserDTO.firstName())
                     .setLastName(updateUserDTO.lastName())
                     .setEmail(updateUserDTO.email())
-                    .setCompany(updateUserDTO.company())
                     .setRole(SecurityRole.getByName(updateUserDTO.role()));
 
             return userMapper.userToUserDto(userToUpdate);

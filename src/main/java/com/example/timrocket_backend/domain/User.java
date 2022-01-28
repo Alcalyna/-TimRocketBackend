@@ -31,9 +31,6 @@ public class User {
     @Column(name = "PASSWORD")
     private String password;
 
-    @Column(name = "COMPANY")
-    private String company;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "ROLE")
     private SecurityRole role;
@@ -49,12 +46,11 @@ public class User {
     @JoinColumn(name = "USER_ID")
     private List<CoachTopic> coachTopics;
 
-    public User(String firstName, String lastName, String email, String password, String company, SecurityRole role) {
+    public User(String firstName, String lastName, String email, String password, SecurityRole role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = Hashing.sha256().hashString(password + "salt", StandardCharsets.UTF_8).toString();
-        this.company = company;
         this.role = role;
         this.pictureUrl = DEFAULT_PROFILE_PICTURE;
     }
@@ -80,10 +76,6 @@ public class User {
 
     public String getPassword() {
         return password;
-    }
-
-    public String getCompany() {
-        return company;
     }
 
     public SecurityRole getRole() {
@@ -122,11 +114,6 @@ public class User {
         return this;
     }
 
-    public User setCompany(String company) {
-        this.company = company;
-        return this;
-    }
-
     public User setRole(SecurityRole role) {
         this.role = role;
         return this;
@@ -135,22 +122,6 @@ public class User {
     public User setPictureUrl(String pictureUrl) {
         this.pictureUrl = pictureUrl;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", company='" + company + '\'' +
-                ", role=" + role +
-                ", pictureUrl='" + pictureUrl + '\'' +
-                ", coachInformation=" + coachInformation +
-                ", coachTopics=" + coachTopics +
-                '}';
     }
 }
 

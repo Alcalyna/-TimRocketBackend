@@ -13,12 +13,12 @@ import java.util.UUID;
 public class UserMapper {
 
     public User createUserDtoToUser(CreateUserDTO createUserDTO) {
-        User user = new User(createUserDTO.firstName(), createUserDTO.lastName(), createUserDTO.email(), createUserDTO.password(), createUserDTO.company(), SecurityRole.COACHEE);
+        User user = new User(createUserDTO.firstName(), createUserDTO.lastName(), createUserDTO.email(), createUserDTO.password(), SecurityRole.COACHEE);
         return user;
     }
 
     public UserDTO userToUserDto(User user) {
-        UserDTO userDTO = new UserDTO(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getCompany(), user.getRoleName(), user.getPictureUrl());
+        UserDTO userDTO = new UserDTO(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getRoleName(), user.getPictureUrl());
         return userDTO;
     }
 

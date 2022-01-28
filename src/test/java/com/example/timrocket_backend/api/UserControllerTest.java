@@ -74,7 +74,7 @@ public class UserControllerTest {
 
     @Test
     void endToEndRegisterUser() {
-        CreateUserDTO createUserDTO = new CreateUserDTO("Test", "Test", "test@test.aaa", "Testtest1", null);
+        CreateUserDTO createUserDTO = new CreateUserDTO("Test", "Test", "test@test.aaa", "Testtest1");
 
         RestAssured.defaultParser = Parser.JSON;
         UserDTO userDTO = RestAssured
@@ -97,7 +97,7 @@ public class UserControllerTest {
 
     @Test
     void endToEndRegisterUser_whenLastNameIsEmpty() {
-        CreateUserDTO createUserDTO = new CreateUserDTO("Test", "", "test@test.aaa", "Testtest1", null);
+        CreateUserDTO createUserDTO = new CreateUserDTO("Test", "", "test@test.aaa", "Testtest1");
 
         RestAssured.defaultParser = Parser.JSON;
         String message = RestAssured
@@ -118,7 +118,7 @@ public class UserControllerTest {
 
     @Test
     void getByEmail() {
-        User user = new User("Linh", "Calinh", "blinh@timrocket.com", "Linhlinh1", "Calinh Corp", SecurityRole.COACHEE);
+        User user = new User("Linh", "Calinh", "blinh@timrocket.com", "Linhlinh1", SecurityRole.COACHEE);
 
         userRepository.save(user);
 
@@ -141,15 +141,14 @@ public class UserControllerTest {
         Assertions.assertEquals("Linh", userDTO.firstName());
         Assertions.assertEquals("Calinh", userDTO.lastName());
         Assertions.assertEquals("blinh@timrocket.com", userDTO.email());
-        Assertions.assertEquals("Calinh Corp", userDTO.company());
-        Assertions.assertEquals(SecurityRole.COACHEE.getRoleName().toUpperCase(), userDTO.role());
+        Assertions.assertEquals(SecurityRole.COACHEE.getRoleName().toLowerCase(), userDTO.role().toLowerCase());
         Assertions.assertEquals("assets/default-profile-picture.jpg", userDTO.pictureUrl());
     }
 
     @Test
     void getAllUsers() {
-        User user1 = new User("Linh", "Calinh", "linh@timrocket.com", "Linhlinh1", "Calinh Corp", SecurityRole.COACHEE);
-        User user2 = new User("Léonie", "Bouchat", "leo@timrocket.com", "Leoleo11", "Tim Roquet", SecurityRole.COACHEE);
+        User user1 = new User("Linh", "Calinh", "linh@timrocket.com", "Linhlinh1",  SecurityRole.COACHEE);
+        User user2 = new User("Léonie", "Bouchat", "leo@timrocket.com", "Leoleo11", SecurityRole.COACHEE);
 
         userRepository.save(user1);
         userRepository.save(user2);
@@ -174,7 +173,7 @@ public class UserControllerTest {
 
     @Test
     void getById() {
-        User user = new User("Ruben", "Tom", "ruben@tom.com", "RubenTom30", null, SecurityRole.COACHEE);
+        User user = new User("Ruben", "Tom", "ruben@tom.com", "RubenTom30", SecurityRole.COACHEE);
 
         userRepository.save(user);
 

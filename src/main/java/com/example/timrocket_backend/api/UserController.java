@@ -42,7 +42,6 @@ public class UserController {
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public UserDTO createUser(@Valid @RequestBody CreateUserDTO createUserDTO){
-        System.out.println("I AM HERE!!!!");
         UserDTO userDTO = userService.createUser(createUserDTO);
         return userDTO;
     }
