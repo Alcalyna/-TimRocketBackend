@@ -14,7 +14,6 @@ public record UpdateUserDTO(
         @Size(max = 25, message = "last name can only be 25 characters long") String lastName,
         @EmailConstraint(message = "email should be provided, contain @ and . and be maximum 50 characters long")
         @DuplicateEmailConstraint(message = "this email address is already in use") String email,
-        String company,
         String role,
         String pictureUrl
         ) {

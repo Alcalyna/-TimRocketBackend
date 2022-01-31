@@ -1,10 +1,12 @@
 package com.example.timrocket_backend.domain;
 
+import com.example.timrocket_backend.domain.topic.CoachTopic;
 import com.example.timrocket_backend.security.SecurityRole;
 import com.google.common.hash.Hashing;
 
 import javax.persistence.*;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -29,9 +31,6 @@ public class User {
     @Column(name = "PASSWORD")
     private String password;
 
-    @Column(name = "COMPANY")
-    private String company;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "ROLE")
     private SecurityRole role;
@@ -39,12 +38,19 @@ public class User {
     @Column(name = "PICTURE_URL")
     private String pictureUrl;
 
-    public User(String firstName, String lastName, String email, String password, String company, SecurityRole role) {
+    @OneToOne
+    @JoinColumn(name = "USER_ID")
+    private CoachInformation coachInformation;
+
+    @OneToMany()
+    @JoinColumn(name = "USER_ID")
+    private List<CoachTopic> coachTopics;
+
+    public User(String firstName, String lastName, String email, String password, SecurityRole role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = Hashing.sha256().hashString(password + "salt", StandardCharsets.UTF_8).toString();
-        this.company = company;
         this.role = role;
         this.pictureUrl = DEFAULT_PROFILE_PICTURE;
     }
@@ -72,10 +78,6 @@ public class User {
         return password;
     }
 
-    public String getCompany() {
-        return company;
-    }
-
     public SecurityRole getRole() {
         return role;
     }
@@ -87,6 +89,14 @@ public class User {
 
     public String getPictureUrl() {
         return pictureUrl;
+    }
+
+    public CoachInformation getCoachInformation() {
+        return coachInformation;
+    }
+
+    public List<CoachTopic> getCoachTopics() {
+        return coachTopics;
     }
 
     public User setFirstName(String firstName) {
@@ -104,11 +114,6 @@ public class User {
         return this;
     }
 
-    public User setCompany(String company) {
-        this.company = company;
-        return this;
-    }
-
     public User setRole(SecurityRole role) {
         this.role = role;
         return this;
@@ -119,3 +124,4 @@ public class User {
         return this;
     }
 }
+

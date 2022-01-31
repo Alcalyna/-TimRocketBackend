@@ -2,6 +2,7 @@ package com.example.timrocket_backend.api;
 
 import com.example.timrocket_backend.security.SecurityServiceInterface;
 import com.example.timrocket_backend.service.UserService;
+import com.example.timrocket_backend.service.dto.CoachDTO;
 import com.example.timrocket_backend.service.dto.CreateUserDTO;
 import com.example.timrocket_backend.service.dto.UpdateUserDTO;
 import com.example.timrocket_backend.service.dto.UserDTO;
@@ -18,7 +19,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -57,17 +60,30 @@ public class UserController {
         return errors;
     }
 
-    @GetMapping(produces = APPLICATION_JSON_VALUE, path = "/{email}")
+    @GetMapping(produces = APPLICATION_JSON_VALUE, params={"email"})
     @ResponseStatus(HttpStatus.OK)
-    public UserDTO getUserByEmail(@PathVariable String email){
+    public UserDTO getUserByEmail(@RequestParam String email){
         return userService.getByEmail(email);
     }
 
-//    @GetMapping(produces = APPLICATION_JSON_VALUE, path = "/{id}")
-//    @ResponseStatus(HttpStatus.OK)
-//    public UserDTO getUserByEmail(@RequestParam String id){
-//        return userService.getById(id);
-//    }
+    @GetMapping(produces = APPLICATION_JSON_VALUE, params = {"coach"})
+    @ResponseStatus(HttpStatus.OK)
+    public List<CoachDTO> getAllCoaches(@RequestParam String coach) {
+        return userService.getAllCoaches();
+    }
+
+    @GetMapping(produces = APPLICATION_JSON_VALUE, path = "/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public UserDTO getUserById(@PathVariable UUID id){
+        return userService.getById(id);
+    }
+
+    @PreAuthorize("hasAuthority('GET_COACH_INFORMATION')")
+    @GetMapping(produces = APPLICATION_JSON_VALUE, params = {"coach"}, path = "/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public CoachDTO getCoachById(@PathVariable UUID id, @RequestParam String coach){
+        return userService.getCoachBy(id);
+    }
 
     @PutMapping(produces = APPLICATION_JSON_VALUE, path = "/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -79,8 +95,6 @@ public class UserController {
         UserDTO user = userService.getByEmail(loggedInUserEmailAddress);
         return userService.updateUser(id, updateUserDTO, user);
     }
-
-
 
 }
 

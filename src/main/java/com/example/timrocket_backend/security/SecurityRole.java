@@ -7,9 +7,10 @@ import java.util.*;
 import static com.example.timrocket_backend.security.Feature.*;
 
 public enum SecurityRole {
-    ADMIN(GET_USER_INFORMATION, UPDATE_PROFILE),
-    COACH(GET_USER_INFORMATION, UPDATE_PROFILE),
+    ADMIN(GET_USER_INFORMATION, UPDATE_PROFILE, GET_COACH_INFORMATION),
+    COACH(GET_USER_INFORMATION, UPDATE_PROFILE, GET_COACH_INFORMATION),
     COACHEE(GET_USER_INFORMATION, UPDATE_PROFILE);
+
 
     private final List<Feature> features;
 
