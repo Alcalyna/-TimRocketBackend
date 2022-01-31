@@ -19,9 +19,8 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.*;
-
 import java.util.Collections;
+import java.util.List;
 
 import static io.restassured.http.ContentType.JSON;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -38,10 +37,9 @@ public class UserControllerTest {
 
     private String url;
     private String coachToken;
-
     private String coacheeToken;
 
-    String userUrlEncoded;
+    String coachUrlEncoded;
     String coacheeUrlEncoded;
 
 
@@ -51,17 +49,17 @@ public class UserControllerTest {
     @BeforeEach
     void init() {
         url = "https://keycloak.switchfully.com/auth/realms/java-oct-2021/protocol/openid-connect/token";
-        userUrlEncoded = "client_id=CodeCoachTimRocket&username=william&password=william&grant_type=password";
-        coacheeUrlEncoded = "client_id=CodeCoachTimRocket&username=linh@timrocket.com&password=Linhlinh1&grant_type=password";
+
+        coachUrlEncoded = "client_id=CodeCoachTimRocket&username=coach@keycloacktoken.com&password=Coach123&grant_type=password";
+        coacheeUrlEncoded = "client_id=CodeCoachTimRocket&username=coachee@keycloacktoken.com&password=Coachee123&grant_type=password";
 
         coachToken = RestAssured.given().auth().preemptive()
                 .basic("temp", "temp")
                 .header("Content-Type", "application/x-www-form-urlencoded")
                 .baseUri("https://keycloak.switchfully.com/auth/realms/java-oct-2021")
-                .body(userUrlEncoded)
+                .body(coachUrlEncoded)
                 .post("/protocol/openid-connect/token")
                 .then().extract().path("access_token").toString();
-
 
         coacheeToken = RestAssured.given().auth().preemptive()
                 .basic("temp", "temp")
@@ -90,9 +88,9 @@ public class UserControllerTest {
                 .extract()
                 .as(UserDTO.class);
 
-        Assertions.assertEquals("Test",userDTO.firstName());
+        Assertions.assertEquals("Test", userDTO.firstName());
         User user = userRepository.getById(userDTO.userId());
-        Assertions.assertEquals("f295398e1493b806b25cd34a73068a31e7e5616f7243b9fe1baead82d6fc5ec8",user.getPassword());
+        Assertions.assertEquals("f295398e1493b806b25cd34a73068a31e7e5616f7243b9fe1baead82d6fc5ec8", user.getPassword());
     }
 
     @Test
@@ -147,7 +145,7 @@ public class UserControllerTest {
 
     @Test
     void getAllUsers() {
-        User user1 = new User("Linh", "Calinh", "linh@timrocket.com", "Linhlinh1",  SecurityRole.COACHEE);
+        User user1 = new User("Linh", "Calinh", "linh@timrocket.com", "Linhlinh1", SecurityRole.COACHEE);
         User user2 = new User("Léonie", "Bouchat", "leo@timrocket.com", "Leoleo11", SecurityRole.COACHEE);
 
         userRepository.save(user1);
@@ -216,8 +214,8 @@ public class UserControllerTest {
                 .as(CoachDTO.class);
 
         Assertions.assertEquals("Tom", coachDTO.user().firstName());
-        Assertions.assertEquals( "Dit is een test introductie" , coachDTO.coachInformation().introduction());
-        Assertions.assertNotEquals( Collections.EMPTY_LIST, coachDTO.coachTopics());
+        Assertions.assertEquals("Dit is een test introductie", coachDTO.coachInformation().introduction());
+        Assertions.assertNotEquals(Collections.EMPTY_LIST, coachDTO.coachTopics());
     }
 
     @Test
@@ -236,6 +234,5 @@ public class UserControllerTest {
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.FORBIDDEN.value());
-
     }
 }
