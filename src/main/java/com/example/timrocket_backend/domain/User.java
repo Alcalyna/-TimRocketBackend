@@ -123,5 +123,30 @@ public class User {
         this.pictureUrl = pictureUrl;
         return this;
     }
+
+    public User setCoachInformation(CoachInformation coachInformation) {
+        this.coachInformation = coachInformation;
+        return this;
+    }
+
+    public User setCoachTopics(List<CoachTopic> coachTopics) {
+        this.coachTopics = coachTopics;
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", role=" + role +
+                ", pictureUrl='" + pictureUrl + '\'' +
+                ", coachInformation=" + coachInformation +
+                ", coachTopics=" + coachTopics +
+                '}';
+    }
 }
 

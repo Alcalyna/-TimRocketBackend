@@ -59,8 +59,14 @@ public class SecurityService implements SecurityServiceInterface{
         return passwordCredentials;
     }
 
-    private void addRole(UserResource User, String roleName) {
+    @Override
+    public void addRole(UserResource User, String roleName) {
         User.roles().clientLevel(getClientId()).add(Lists.newArrayList(getRole(roleName)));
+    }
+
+    @Override
+    public void removeRole(UserResource User, String roleName) {
+        User.roles().clientLevel(getClientId()).remove(Lists.newArrayList(getRole(roleName)));
     }
 
     private String getClientId() {
@@ -71,7 +77,8 @@ public class SecurityService implements SecurityServiceInterface{
         return realmResource.users().create(createUserRepresentation(userName));
     }
 
-    private UserResource getUser(String userId) {
+    @Override
+    public UserResource getUser(String userId) {
         return realmResource.users().get(userId);
     }
 
