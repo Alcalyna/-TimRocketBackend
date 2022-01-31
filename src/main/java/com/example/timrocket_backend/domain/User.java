@@ -31,9 +31,6 @@ public class User {
     @Column(name = "PASSWORD")
     private String password;
 
-    @Column(name = "COMPANY")
-    private String company;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "ROLE")
     private SecurityRole role;
@@ -49,12 +46,11 @@ public class User {
     @JoinColumn(name = "USER_ID")
     private List<CoachTopic> coachTopics;
 
-    public User(String firstName, String lastName, String email, String password, String company, SecurityRole role) {
+    public User(String firstName, String lastName, String email, String password, SecurityRole role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = Hashing.sha256().hashString(password + "salt", StandardCharsets.UTF_8).toString();
-        this.company = company;
         this.role = role;
         this.pictureUrl = DEFAULT_PROFILE_PICTURE;
     }
@@ -82,10 +78,6 @@ public class User {
         return password;
     }
 
-    public String getCompany() {
-        return company;
-    }
-
     public SecurityRole getRole() {
         return role;
     }
@@ -106,4 +98,30 @@ public class User {
     public List<CoachTopic> getCoachTopics() {
         return coachTopics;
     }
+
+    public User setFirstName(String firstName) {
+        this.firstName = firstName;
+        return this;
+    }
+
+    public User setLastName(String lastName) {
+        this.lastName = lastName;
+        return this;
+    }
+
+    public User setEmail(String email) {
+        this.email = email;
+        return this;
+    }
+
+    public User setRole(SecurityRole role) {
+        this.role = role;
+        return this;
+    }
+
+    public User setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
+        return this;
+    }
 }
+

@@ -3,12 +3,15 @@ package com.example.timrocket_backend.api;
 import com.example.timrocket_backend.service.UserService;
 import com.example.timrocket_backend.service.dto.CoachDTO;
 import com.example.timrocket_backend.service.dto.CreateUserDTO;
+import com.example.timrocket_backend.service.dto.UpdateUserDTO;
 import com.example.timrocket_backend.service.dto.UserDTO;
-import com.example.timrocket_backend.security.SecurityServiceInterface;
+import org.keycloak.adapters.springsecurity.account.SimpleKeycloakAccount;
+import org.keycloak.representations.AccessToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -74,11 +77,23 @@ public class UserController {
         return userService.getById(id);
     }
 
-    @PreAuthorize("hasAnyAuthority('GET_COACH_INFORMATION')")
-    @GetMapping(produces = APPLICATION_JSON_VALUE, params = {"coach"}, path = "{id}")
+    @PreAuthorize("hasAuthority('GET_COACH_INFORMATION')")
+    @GetMapping(produces = APPLICATION_JSON_VALUE, params = {"coach"}, path = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     public CoachDTO getCoachById(@PathVariable UUID id, @RequestParam String coach){
         return userService.getCoachBy(id);
     }
+
+    @PutMapping(produces = APPLICATION_JSON_VALUE, path = "/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAuthority('UPDATE_PROFILE')")
+    public UserDTO updateUser(@PathVariable String id, @RequestBody UpdateUserDTO updateUserDTO, Authentication authentication) {
+        SimpleKeycloakAccount simpleKeycloakAccount = (SimpleKeycloakAccount)authentication.getDetails();
+        AccessToken token = simpleKeycloakAccount.getKeycloakSecurityContext().getToken();
+        String loggedInUserEmailAddress = token.getPreferredUsername();
+        UserDTO user = userService.getByEmail(loggedInUserEmailAddress);
+        return userService.updateUser(id, updateUserDTO, user);
+    }
+
 }
 
