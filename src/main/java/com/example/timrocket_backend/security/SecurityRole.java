@@ -35,6 +35,14 @@ public enum SecurityRole {
         }
         return null;
     }
+
+    public static class RoleComparator implements Comparator<SecurityRole> {
+        public int compare(SecurityRole o1, SecurityRole o2) {
+            return -o1.getRoleName().toLowerCase().compareTo(o2.getRoleName().toLowerCase());
+        }
+    }
+
+
 }
 
 

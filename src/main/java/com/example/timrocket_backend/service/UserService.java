@@ -6,7 +6,6 @@ import com.example.timrocket_backend.exception.EditNotAllowedException;
 import com.example.timrocket_backend.repository.CoachInformationRepository;
 import com.example.timrocket_backend.repository.UserRepository;
 import com.example.timrocket_backend.security.SecurityRole;
-import com.example.timrocket_backend.security.SecurityService;
 import com.example.timrocket_backend.security.SecurityServiceInterface;
 import com.example.timrocket_backend.security.SecurityUserDTO;
 import com.example.timrocket_backend.service.dto.CoachDTO;
@@ -23,9 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -84,36 +83,56 @@ public class UserService {
     }
 
     public UserDTO updateUser(String id, UpdateUserDTO updateUserDTO, Authentication authentication) {
+
         UserDTO loggedInUser = getUserDtoFromAuthentification(authentication);
+
+
         validateCanEdit(id, loggedInUser);
+
+
         User userToUpdate = userRepository.getById(UUID.fromString(id));
 
-        updateRoleInKeycloak(authentication, updateUserDTO.role());
+        String currentRole = userToUpdate.getRoleName().toLowerCase();
+        String newRole = updateUserDTO.role().toLowerCase();
+
+        if (newRole.equalsIgnoreCase("coach") && !currentRole.equals(newRole) ) {
+            CoachInformation defaultCoachInformation = new CoachInformation(userToUpdate.getId(), 0, "Hey I am new coach!", "");
+
+            coachInformationRepository.save(defaultCoachInformation);
+        } else if (newRole.equalsIgnoreCase("coachee") && currentRole.equalsIgnoreCase("coach")) {
+            coachInformationRepository.deleteById(userToUpdate.getId());
+        }
+
+        updateRoleInKeycloak(authentication, userToUpdate.getRoleName(), updateUserDTO.role());
+
 
         userToUpdate.setFirstName(updateUserDTO.firstName())
                 .setLastName(updateUserDTO.lastName())
                 .setEmail(updateUserDTO.email())
                 .setRole(SecurityRole.getByName(updateUserDTO.role()));
 
-        if (userToUpdate.getRoleName().equalsIgnoreCase("coach")) {
-            CoachInformation defaultCoachInformation = new CoachInformation(userToUpdate.getId(), 0, "Hey I am new coach!", "");
-            coachInformationRepository.save(defaultCoachInformation);
-
-        } else if (userToUpdate.getRoleName().equalsIgnoreCase("coachee")) {
-            coachInformationRepository.deleteById(userToUpdate.getId());
-        }
 
         return userMapper.userToUserDto(userToUpdate);
     }
 
-    private void updateRoleInKeycloak(Authentication authentication, String role) {
+    private void updateRoleInKeycloak(Authentication authentication, String currentRole, String newRole) {
         SimpleKeycloakAccount simpleKeycloakAccount = (SimpleKeycloakAccount) authentication.getDetails();
         AccessToken token = simpleKeycloakAccount.getKeycloakSecurityContext().getToken();
         String id = token.getSubject();
-//        SecurityRole[] roles = SecurityRole.values();
-        securityServiceInterface.addRole(securityServiceInterface.getUser(id), role);
-        securityServiceInterface.removeRole(securityServiceInterface.getUser(id), "admin");
+
+
+        SecurityRole.RoleComparator comparator = new SecurityRole.RoleComparator();
+        int oldMinusNew = comparator.compare(SecurityRole.getByName(currentRole), SecurityRole.getByName(newRole));
+
+        if(oldMinusNew > 0) {
+            securityServiceInterface.addRole(securityServiceInterface.getUser(id), newRole.toLowerCase());
+            securityServiceInterface.removeRole(securityServiceInterface.getUser(id), currentRole.toLowerCase());
+        } else if(oldMinusNew < 0) {
+            securityServiceInterface.addRole(securityServiceInterface.getUser(id), newRole.toLowerCase());
+        }
     }
+
+
 
     private void validateCanEdit(String id, UserDTO loggedInUser) {
         if (!(SecurityRole.getByName(loggedInUser.role()) == (SecurityRole.ADMIN) || id.equals(loggedInUser.userId().toString()))) {
@@ -131,8 +150,8 @@ public class UserService {
     public UserDTO updateRoleToCoach(Authentication authentication) {
         UserDTO loggedInUser = getUserDtoFromAuthentification(authentication);
         User userToUpdate = userRepository.getById(loggedInUser.userId());
+        updateRoleInKeycloak(authentication, userToUpdate.getRoleName(),"coach");
         userToUpdate.setRole(SecurityRole.COACH);
-        updateRoleInKeycloak(authentication, "coach");
         CoachInformation defaultCoachInformation = new CoachInformation(userToUpdate.getId(), 0, "Hey I am new coach!", "");
         coachInformationRepository.save(defaultCoachInformation);
         return userMapper.userToUserDto(userToUpdate);
