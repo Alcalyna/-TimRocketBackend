@@ -9,10 +9,7 @@ import com.example.timrocket_backend.service.dto.UserDTO;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.parsing.Parser;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -145,11 +142,6 @@ public class UserControllerTest {
 
     @Test
     void getAllUsers() {
-        User user1 = new User("Linh", "Calinh", "linh@timrocket.com", "Linhlinh1", SecurityRole.COACHEE);
-        User user2 = new User("Léonie", "Bouchat", "leo@timrocket.com", "Leoleo11", SecurityRole.COACHEE);
-
-        userRepository.save(user1);
-        userRepository.save(user2);
 
         List<CoachDTO> userDTOList = RestAssured
                 .given()
