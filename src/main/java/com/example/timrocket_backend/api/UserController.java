@@ -89,12 +89,14 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasAuthority('UPDATE_PROFILE')")
     public UserDTO updateUser(@PathVariable String id, @RequestBody UpdateUserDTO updateUserDTO, Authentication authentication) {
-        SimpleKeycloakAccount simpleKeycloakAccount = (SimpleKeycloakAccount)authentication.getDetails();
-        AccessToken token = simpleKeycloakAccount.getKeycloakSecurityContext().getToken();
-        String loggedInUserEmailAddress = token.getPreferredUsername();
-        UserDTO user = userService.getByEmail(loggedInUserEmailAddress);
-        return userService.updateUser(id, updateUserDTO, user);
+        return userService.updateUser(id, updateUserDTO, authentication);
     }
 
+    @PutMapping(produces = APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAuthority('BECOME_A_COACH')")
+    public UserDTO updateToCoach(Authentication authentication) {
+        return userService.updateRoleToCoach(authentication);
+    }
 }
 
