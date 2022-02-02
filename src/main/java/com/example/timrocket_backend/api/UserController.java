@@ -75,26 +75,35 @@ public class UserController {
     @GetMapping(produces = APPLICATION_JSON_VALUE, path = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     public UserDTO getUserById(@PathVariable UUID id){
-        return userService.getById(id);
+        logger.info("Get User By Id started");
+        UserDTO userDTO = userService.getById(id);
+        logger.info("Get User By Id finished");
+        return userDTO;
     }
 
     @PreAuthorize("hasAuthority('GET_COACH_INFORMATION')")
     @GetMapping(produces = APPLICATION_JSON_VALUE, params = {"coach"}, path = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     public CoachDTO getCoachById(@PathVariable UUID id, @RequestParam String coach){
+        System.out.println("I am here ");
+        System.out.println("The id is " + id);
         return userService.getCoachBy(id);
     }
+
+//    public CoachDTO getCoachProfile(@PathVariable UUID id)
 
     @PutMapping(produces = APPLICATION_JSON_VALUE, path = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasAuthority('UPDATE_PROFILE')")
     public UserDTO updateUser(@PathVariable String id, @RequestBody UpdateUserDTO updateUserDTO, Authentication authentication) {
-        SimpleKeycloakAccount simpleKeycloakAccount = (SimpleKeycloakAccount)authentication.getDetails();
-        AccessToken token = simpleKeycloakAccount.getKeycloakSecurityContext().getToken();
-        String loggedInUserEmailAddress = token.getPreferredUsername();
-        UserDTO user = userService.getByEmail(loggedInUserEmailAddress);
-        return userService.updateUser(id, updateUserDTO, user);
+        return userService.updateUser(id, updateUserDTO, authentication);
     }
 
+    @PutMapping(produces = APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAuthority('BECOME_A_COACH')")
+    public UserDTO updateToCoach(Authentication authentication) {
+        return userService.updateRoleToCoach(authentication);
+    }
 }
 
