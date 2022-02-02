@@ -1,5 +1,6 @@
 package com.example.timrocket_backend.api;
 
+import com.example.timrocket_backend.security.SecurityServiceInterface;
 import com.example.timrocket_backend.service.UserService;
 import com.example.timrocket_backend.service.dto.CoachDTO;
 import com.example.timrocket_backend.service.dto.CreateUserDTO;
