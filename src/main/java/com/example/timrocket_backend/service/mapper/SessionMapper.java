@@ -27,9 +27,12 @@ public class SessionMapper {
                 userRepository.getById(createSessionDTO.coach_id()));
         return session;
     }
-
+     //    //public record SessionDTO(UUID sessionId, String subject, LocalDate date, LocalTime time,
+     //    //                         String location, String f2fLocation, String remarks, User coachee, User coach) {
     public SessionDTO sessionToSessionDto(Session session){
-        SessionDTO sessionDTO = new SessionDTO(session.getSessionId(), session.getSubject());
+        SessionDTO sessionDTO = new SessionDTO(session.getSessionId(), session.getSubject(), session.getDate(),
+                session.getTime(), session.getLocation(), session.getF2fLocation(), session.getRemarks()
+                , session.getCoachee(), session.getCoach());
         return sessionDTO;
     }
 }

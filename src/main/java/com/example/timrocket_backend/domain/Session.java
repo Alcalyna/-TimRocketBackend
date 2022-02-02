@@ -60,4 +60,32 @@ public class Session {
     public String getSubject() {
         return subject;
     }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public LocalTime getTime() {
+        return time;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public String getF2fLocation() {
+        return f2fLocation;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public User getCoachee() {
+        return coachee;
+    }
+
+    public User getCoach() {
+        return coach;
+    }
 }
