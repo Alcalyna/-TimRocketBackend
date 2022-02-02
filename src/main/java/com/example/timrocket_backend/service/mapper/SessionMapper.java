@@ -6,13 +6,18 @@ import com.example.timrocket_backend.service.dto.session.CreateSessionDTO;
 import com.example.timrocket_backend.service.dto.session.SessionDTO;
 import org.springframework.stereotype.Component;
 
+
 @Component
 public class SessionMapper {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
+    private final CoachMapper coachMapper;
 
-    public SessionMapper(UserRepository userRepository) {
+    public SessionMapper(UserRepository userRepository, UserMapper userMapper, CoachMapper coachMapper) {
         this.userRepository = userRepository;
+        this.userMapper = userMapper;
+        this.coachMapper = coachMapper;
     }
 
     public Session createSessionDtoToSession(CreateSessionDTO createSessionDTO){
@@ -32,7 +37,7 @@ public class SessionMapper {
     public SessionDTO sessionToSessionDto(Session session){
         SessionDTO sessionDTO = new SessionDTO(session.getSessionId(), session.getSubject(), session.getDate(),
                 session.getTime(), session.getLocation(), session.getF2fLocation(), session.getRemarks()
-                , session.getCoachee(), session.getCoach());
+                , userMapper.userToUserDto(session.getCoachee()), coachMapper.mapUserToCoachDto(session.getCoach()));
         return sessionDTO;
     }
 }
