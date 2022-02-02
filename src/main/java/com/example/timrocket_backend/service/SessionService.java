@@ -7,6 +7,9 @@ import com.example.timrocket_backend.service.dto.session.SessionDTO;
 import com.example.timrocket_backend.service.mapper.SessionMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class SessionService {
 
@@ -23,5 +26,11 @@ public class SessionService {
         sessionRepository.save(session);
         SessionDTO sessionDTO = sessionMapper.sessionToSessionDto(session);
         return sessionDTO;
+    }
+
+    public List<SessionDTO> getAll() {
+        return sessionRepository.findAll().stream()
+                .map(s -> sessionMapper.sessionToSessionDto(s))
+                .collect(Collectors.toList());
     }
 }

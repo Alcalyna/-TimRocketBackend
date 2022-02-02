@@ -1,6 +1,7 @@
 package com.example.timrocket_backend.api;
 
 import com.example.timrocket_backend.service.SessionService;
+import com.example.timrocket_backend.service.dto.CoachDTO;
 import com.example.timrocket_backend.service.dto.session.CreateSessionDTO;
 import com.example.timrocket_backend.service.dto.session.SessionDTO;
 import org.slf4j.LoggerFactory;
@@ -13,6 +14,7 @@ import org.slf4j.Logger;
 import javax.validation.Valid;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -27,6 +29,12 @@ public class SessionController {
     public SessionController(SessionService sessionService) {
         this.sessionService = sessionService;
         this.logger = LoggerFactory.getLogger(SessionController.class);
+    }
+
+    @GetMapping(produces = APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public List<SessionDTO> getAllSessions() {
+        return sessionService.getAll();
     }
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
