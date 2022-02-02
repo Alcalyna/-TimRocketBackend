@@ -1,5 +1,6 @@
 package com.example.timrocket_backend.api;
 
+import com.example.timrocket_backend.domain.User;
 import com.example.timrocket_backend.security.SecurityServiceInterface;
 import com.example.timrocket_backend.service.UserService;
 import com.example.timrocket_backend.service.dto.CoachDTO;
@@ -74,9 +75,15 @@ public class UserController {
 
     @GetMapping(produces = APPLICATION_JSON_VALUE, path = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public UserDTO getUserById(@PathVariable UUID id){
+    public UserDTO getUserById(@PathVariable String id){
         logger.info("Get User By Id started");
-        UserDTO userDTO = userService.getById(id);
+        UserDTO userDTO;
+        try {
+            UUID uuid = UUID.fromString(id);
+            userDTO = userService.getById(uuid);
+        } catch (Exception e) {
+            userDTO = null;
+        }
         logger.info("Get User By Id finished");
         return userDTO;
     }
