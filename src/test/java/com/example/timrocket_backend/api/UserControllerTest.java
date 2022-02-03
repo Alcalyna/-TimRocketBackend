@@ -213,7 +213,7 @@ public class UserControllerTest {
     }
 
     @Test
-    @DisplayName("Given an unauthorized user, when getting coach by id, then return 403 forbidden")
+    @DisplayName("Needs rewriting, user can look at coaches profile")
     void getErrorWhenGetCoachByIdAsUnauthorizedUser() {
 
         RestAssured
@@ -227,7 +227,7 @@ public class UserControllerTest {
                 .get("/users/{id}?coach=")
                 .then()
                 .assertThat()
-                .statusCode(HttpStatus.FORBIDDEN.value());
+                .statusCode(HttpStatus.OK.value());
     }
 
     @Test
