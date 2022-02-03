@@ -5,14 +5,12 @@ import com.example.timrocket_backend.repository.UserRepository;
 import com.example.timrocket_backend.security.SecurityRole;
 import com.example.timrocket_backend.service.dto.CoachDTO;
 import com.example.timrocket_backend.service.dto.CreateUserDTO;
+import com.example.timrocket_backend.service.dto.UpdateUserDTO;
 import com.example.timrocket_backend.service.dto.UserDTO;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.parsing.Parser;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -21,6 +19,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import static io.restassured.http.ContentType.JSON;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -145,11 +144,6 @@ public class UserControllerTest {
 
     @Test
     void getAllUsers() {
-        User user1 = new User("Linh", "Calinh", "linh@timrocket.com", "Linhlinh1", SecurityRole.COACHEE);
-        User user2 = new User("Léonie", "Bouchat", "leo@timrocket.com", "Leoleo11", SecurityRole.COACHEE);
-
-        userRepository.save(user1);
-        userRepository.save(user2);
 
         List<CoachDTO> userDTOList = RestAssured
                 .given()
@@ -234,5 +228,60 @@ public class UserControllerTest {
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.FORBIDDEN.value());
+    }
+
+    @Test
+    void endToEndUpdateUser() {
+        User user = new User("Ruben", "Tom", "coachee@keycloacktoken.com", "RubenTom30", SecurityRole.COACHEE);
+        User savedUser = userRepository.save(user);
+
+        UpdateUserDTO updateUserDTO = new UpdateUserDTO("RubenUpdate", "TomUpdate", "coachee@keycloacktoken.com", SecurityRole.COACHEE.getRoleName(), "testpicture.jpg");
+
+        String savedUserId = savedUser.getId().toString();
+
+        RestAssured.defaultParser = Parser.JSON;
+        UserDTO userDTO = RestAssured
+                .given()
+                .header("Authorization", "Bearer " + coacheeToken)
+                .body(updateUserDTO)
+                .accept(JSON)
+                .contentType(JSON)
+                .when()
+                .port(port)
+                .pathParam("id", savedUserId)
+                .put("/users/{id}")
+                .then().assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .extract()
+                .as(UserDTO.class);
+
+        Assertions.assertEquals("RubenUpdate", userDTO.firstName());
+        Assertions.assertEquals("coachee@keycloacktoken.com", userDTO.email());
+        Assertions.assertEquals("coachee", userDTO.role().toLowerCase());
+    }
+
+    @Test
+    void endToEndUserUpdateWithDifferentUsers() {
+        User user = new User("Ruben", "Tom", "coach@keycloacktoken.com", "RubenTom30", SecurityRole.COACHEE);
+        User savedUser = userRepository.save(user);
+
+        UpdateUserDTO updateUserDTO = new UpdateUserDTO("RubenUpdate", "TomUpdate", "coachee@keycloacktoken.com", SecurityRole.COACHEE.getRoleName(), "testpicture.jpg");
+
+        String exception = RestAssured
+                .given()
+                .header("Authorization", "Bearer " + coachToken)
+                .body(updateUserDTO)
+                .accept(JSON)
+                .contentType(JSON)
+                .when()
+                .port(port)
+                .pathParam("id", "2ac5b3fc-95df-40fb-8cab-b994bee20f0c")
+                .put("/users/{id}")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .extract().path("message");
+
+        Assertions.assertEquals("You are not allowed to edit this profile!", exception);
     }
 }
